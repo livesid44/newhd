@@ -26,6 +26,11 @@ A comprehensive ASP.NET Core MVC application for managing client visits and user
 - **Search Functionality**: Quick search across user data
 
 ### Technical Features
+- **Enterprise-Level Authentication**: ASP.NET Core Identity with secure login/register
+- **Role-Based Access Control**: Protected routes requiring authentication
+- **Secure Password Requirements**: 8+ characters with uppercase, lowercase, digit, and special character
+- **Account Security**: Automatic lockout after 5 failed login attempts
+- **Session Management**: Secure 8-hour cookie-based sessions
 - Responsive design using Bootstrap 5
 - Data validation with DataAnnotations
 - Entity Framework Core with Code-First approach
@@ -90,6 +95,27 @@ The application will start and be accessible at:
 - HTTPS: `https://localhost:5001`
 - HTTP: `http://localhost:5000`
 
+### 6. Register and Login
+
+On first run, you'll be redirected to the login page. Click "Register here" to create a new account:
+- Enter your full name, email, and password
+- Password must be at least 8 characters with uppercase, lowercase, digit, and special character
+- After registration, you'll be automatically logged in
+
+## Authentication
+
+The application uses ASP.NET Core Identity for secure authentication:
+
+- **Login**: Access at `/Account/Login` or click "Login" in the navigation
+- **Register**: Access at `/Account/Register` or click "Register" in the navigation
+- **Logout**: Click on your username dropdown and select "Logout"
+- **Protected Routes**: Visit and User management pages require authentication
+- **Security Features**:
+  - Secure password hashing
+  - Account lockout after 5 failed login attempts (15-minute lockout)
+  - HttpOnly cookies for session management
+  - 8-hour session timeout with sliding expiration
+
 ## Running Tests
 
 Execute the unit tests with:
@@ -107,14 +133,20 @@ All tests should pass, validating the core functionality of the controllers.
 newhd/
 ├── VisitManagement/              # Main application
 │   ├── Controllers/              # MVC Controllers
+│   │   ├── AccountController.cs   # Authentication
 │   │   ├── VisitsController.cs
 │   │   └── UsersController.cs
 │   ├── Data/                     # Database context
 │   │   └── ApplicationDbContext.cs
 │   ├── Models/                   # Data models
+│   │   ├── ApplicationUser.cs     # Identity user model
 │   │   ├── Visit.cs
 │   │   └── User.cs
+│   ├── ViewModels/               # View models
+│   │   ├── LoginViewModel.cs
+│   │   └── RegisterViewModel.cs
 │   ├── Views/                    # Razor views
+│   │   ├── Account/               # Login/Register
 │   │   ├── Visits/
 │   │   ├── Users/
 │   │   └── Shared/
@@ -126,6 +158,13 @@ newhd/
 ```
 
 ## Database Schema
+
+### Identity Tables
+ASP.NET Core Identity creates the following tables:
+- **AspNetUsers**: Authenticated users with email, password hash, and security stamps
+- **AspNetRoles**: User roles (if role-based access is configured)
+- **AspNetUserRoles**: Many-to-many relationship between users and roles
+- **AspNetUserClaims**, **AspNetUserLogins**, **AspNetUserTokens**: Additional Identity features
 
 ### Visits Table
 Stores comprehensive visit information with fields including:
@@ -142,6 +181,17 @@ Manages user information:
 - Creation date tracking
 
 ## Usage
+
+### First Time Setup
+
+1. **Run the application** and you'll be redirected to the login page
+2. **Click "Register here"** to create your first account
+3. **Fill in the registration form**:
+   - Full Name
+   - Email (must be unique)
+   - Password (minimum 8 characters, must include uppercase, lowercase, digit, and special character)
+   - Confirm Password
+4. **After registration**, you'll be automatically logged in and redirected to the Visits page
 
 ### Managing Visits
 
