@@ -29,12 +29,14 @@
                     <label class="logo me-auto"></label>
                     <form class="d-flex">
                         <div class="dropdown">
-                            <button type="button" class="btn username dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle user-pic"></i>@User.Identity.Name
+                            <button type="button" class="btn username dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle user-pic me-2"></i>
+                                <span>@User.Identity.Name</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
                                     <form asp-controller="Account" asp-action="Logout" method="post" class="px-3 py-1">
+                                        @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-link dropdown-item text-decoration-none p-0">
                                             <i class="bi bi-box-arrow-right"></i> Logout
                                         </button>

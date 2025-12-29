@@ -52,6 +52,13 @@ body.navOpen {
 
 .aura {
   margin-top: 66px;
+  position: relative;
+  z-index: 1;
+}
+
+.aura .container-fluid {
+  position: relative;
+  z-index: 1;
 }
 
 /* White Background Container */
@@ -88,17 +95,33 @@ body.navOpen {
   width: auto;
 }
 
-.techm-logo {
+.techm {
   height: 35px;
   width: auto;
   margin-left: 15px;
 }
 
+.micro-logo {
+  height: 40px;
+  width: auto;
+}
+
 .user-pic {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  margin-right: 6px;
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.username {
+  border: none;
+  background: none !important;
+  color: var(--text-dark) !important;
+  padding: 5px 10px;
+}
+
+.username:hover, .username:focus {
+  background: none !important;
+  color: var(--primary-color) !important;
+  box-shadow: none !important;
 }
 
 /* Side Navigation */
