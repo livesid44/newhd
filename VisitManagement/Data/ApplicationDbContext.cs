@@ -13,6 +13,8 @@ namespace VisitManagement.Data
 
         public DbSet<Visit> Visits { get; set; }
         public DbSet<User> VisitUsers { get; set; }
+        public DbSet<SmtpSettings> SmtpSettings { get; set; }
+        public DbSet<EmailTemplate> EmailTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -118,6 +120,60 @@ namespace VisitManagement.Data
                     KeyMessages = "Showcase platform scalability and security features",
                     CreatedDate = DateTime.Now,
                     CreatedBy = "admin@visitmanagement.com"
+                }
+            );
+
+            // Seed data for Email Templates
+            modelBuilder.Entity<EmailTemplate>().HasData(
+                new EmailTemplate
+                {
+                    Id = 1,
+                    Name = "Visit Created Notification",
+                    TemplateType = "VisitCreated",
+                    Subject = "New Visit Created - {AccountName}",
+                    Body = @"<html><body>
+<h2>New Visit Has Been Created</h2>
+<p>A new visit has been scheduled with the following details:</p>
+<ul>
+<li><strong>Account Name:</strong> {AccountName}</li>
+<li><strong>Visit Date:</strong> {VisitDate}</li>
+<li><strong>Location:</strong> {Location}</li>
+<li><strong>Status:</strong> {VisitStatus}</li>
+<li><strong>Sales SPOC:</strong> {SalesSpoc}</li>
+<li><strong>Visit Type:</strong> {VisitType}</li>
+<li><strong>Visitors:</strong> {VisitorsName}</li>
+</ul>
+<p>Please review the visit details in the system.</p>
+<p>Best regards,<br/>Visit Management System</p>
+</body></html>",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new EmailTemplate
+                {
+                    Id = 2,
+                    Name = "Visit Updated Notification",
+                    TemplateType = "VisitUpdated",
+                    Subject = "Visit Updated - {AccountName}",
+                    Body = @"<html><body>
+<h2>Visit Has Been Updated</h2>
+<p>The visit details have been modified:</p>
+<ul>
+<li><strong>Account Name:</strong> {AccountName}</li>
+<li><strong>Visit Date:</strong> {VisitDate}</li>
+<li><strong>Location:</strong> {Location}</li>
+<li><strong>Status:</strong> {VisitStatus}</li>
+<li><strong>Sales SPOC:</strong> {SalesSpoc}</li>
+<li><strong>Visit Type:</strong> {VisitType}</li>
+<li><strong>Visitors:</strong> {VisitorsName}</li>
+</ul>
+<p>Please check the updated information in the system.</p>
+<p>Best regards,<br/>Visit Management System</p>
+</body></html>",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
                 }
             );
         }
