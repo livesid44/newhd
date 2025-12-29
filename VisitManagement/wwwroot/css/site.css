@@ -26,6 +26,11 @@ body {
   background: url("../images/bg.png");
   background-size: cover;
   background-attachment: fixed;
+  transition: all 0.8s;
+}
+
+body.navOpen {
+  padding-left: 265px;
 }
 
 /* GoTasker Color Scheme */
@@ -40,8 +45,13 @@ body {
 }
 
 /* Main Content Container */
-.container {
+.container, .container-fluid {
   padding: 20px;
+  transition: all 0.8s;
+}
+
+.aura {
+  margin-top: 66px;
 }
 
 /* White Background Container */
@@ -65,6 +75,12 @@ body {
   background-color: #fff !important;
   box-shadow: 0 2px 4px rgba(0,0,0,.1);
   padding: 10px 15px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: 66px;
 }
 
 .navbar-brand img {
@@ -83,6 +99,151 @@ body {
   height: 28px;
   border-radius: 50%;
   margin-right: 6px;
+}
+
+/* Side Navigation */
+.sideNav {
+  background-color: #fff;
+  padding: 0px 0 25px;
+  position: fixed;
+  top: 66px;
+  bottom: 0;
+  height: 100%;
+  width: 50px;
+  left: 0;
+  transition: all 0.8s;
+  z-index: 99;
+  box-shadow: 2px 0 4px rgba(0,0,0,.1);
+}
+
+.sideNav.active {
+  width: 265px;
+}
+
+.sideNav > ul > li span {
+  display: none;
+  position: relative;
+  z-index: 9;
+}
+
+.sideNav.active > ul > li span {
+  display: inline-block;
+}
+
+.sideNav > ul > li {
+  padding: 0;
+  position: relative;
+  list-style: none;
+}
+
+.sideNav > ul > li > a {
+  position: relative;
+}
+
+.sideNav > ul > li > a:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #e5dfd3;
+  width: 0;
+  transition: width 0.8s;
+  max-height: 40px;
+}
+
+.sideNav > ul > li:hover > a:before,
+.sideNav ul > li.active > a:before {
+  width: 100%;
+}
+
+.sideNav > ul > li > a {
+  min-height: 40px;
+}
+
+.sideNav ul > li a {
+  position: relative;
+  color: #000;
+  display: block;
+  padding: 9px 15px 9px 43px;
+  z-index: 9;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.sideNav:not(.active) ul > li a {
+  padding-left: 15px;
+}
+
+.sideNav ul > li a img {
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  transition: opacity 0.5s;
+  z-index: 9;
+  max-width: 18px;
+  max-height: 18px;
+}
+
+.sideNav ul > li a img + img,
+.sideNav ul > li:hover > a img,
+.sideNav ul > li.active > a > img {
+  opacity: 0;
+}
+
+.sideNav ul > li:hover > a img + img,
+.sideNav ul > li.active > a > img + img {
+  opacity: 1;
+}
+
+.sideNav ul > li:hover > a,
+.sideNav ul > li:focus > a,
+.sideNav ul > li.active > a {
+  background-color: transparent;
+  text-decoration: none;
+  color: #e31837;
+}
+
+.sideNav ul > li:first-child {
+  background-color: #c1c1bf;
+}
+
+.toggleMenuLink.two {
+  position: fixed;
+  left: 10px;
+  top: 75px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.toggleMenuLink.two:before {
+  content: "";
+  width: 23px;
+  height: 23px;
+  background: transparent url(../images/menuIcons/icon1.png) 0 0 no-repeat;
+  background-size: 22px;
+  display: block;
+  margin: 3px 0;
+}
+
+.navOverlay {
+  position: fixed;
+  top: 66px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 98;
+  display: none;
+}
+
+.navOverlay.active {
+  display: block;
 }
 
 /* Button Styles */
@@ -111,6 +272,7 @@ body {
 .card {
   border-radius: 0px;
   box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  background-color: #fff;
 }
 
 .card-header {
@@ -183,12 +345,22 @@ a:hover {
   border-top: 1px solid var(--border-color);
   padding: 15px 0;
   color: var(--text-gray);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 97;
 }
 
 /* Form Controls */
 .form-control:focus {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 0.2rem rgba(227, 24, 55, 0.25);
+}
+
+.form-label {
+  font-weight: 500;
+  color: var(--text-dark);
 }
 
 /* Pagination */
@@ -212,4 +384,68 @@ a:hover {
   right: 4px;
   float: right;
   color: var(--text-gray);
+}
+
+/* Page Title */
+.pg-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 15px;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.dashboard-card.primary {
+  border-left: 4px solid var(--primary-color);
+}
+
+.dashboard-card.success {
+  border-left: 4px solid #28a745;
+}
+
+.dashboard-card.warning {
+  border-left: 4px solid #ffc107;
+}
+
+/* Login Page Styling */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("../images/bg.png");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.login-card {
+  max-width: 450px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,.1);
+  padding: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body.navOpen {
+    padding-left: 0;
+  }
+  
+  .sideNav {
+    transform: translateX(-100%);
+  }
+  
+  .sideNav.active {
+    transform: translateX(0);
+  }
 }
