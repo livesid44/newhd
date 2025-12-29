@@ -52,11 +52,19 @@ body.navOpen {
 
 .aura {
   margin-top: 66px;
+  padding-top: 20px;
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 66px);
+}
+
+.aura .container-fluid {
   position: relative;
   z-index: 1;
 }
 
-.aura .container-fluid {
+/* Ensure main content area has proper spacing */
+main {
   position: relative;
   z-index: 1;
 }
