@@ -23,6 +23,9 @@ body {
   font-size: 13px;
   word-spacing: 1px;
   letter-spacing: 1px;
+  background: url("../images/bg.png");
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 /* GoTasker Color Scheme */
@@ -33,6 +36,28 @@ body {
   --border-color: #e5dfd3;
   --text-dark: #4d4d4f;
   --text-gray: #707070;
+  --table-header-bg: #e6e7e8;
+}
+
+/* Main Content Container */
+.container {
+  padding: 20px;
+}
+
+/* White Background Container */
+.white-bg-main {
+  background-color: #fff !important;
+  border-radius: 0px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.white-bg {
+  background-color: #fff !important;
+  border-radius: 0px;
+  padding: 15px;
+  border: 1px solid #ccc;
 }
 
 /* Navbar Styling */
@@ -94,15 +119,53 @@ body {
 }
 
 /* Tables */
+.table {
+  font-size: 13px !important;
+  background-color: #fff;
+}
+
 .table thead th {
-  background-color: var(--secondary-color);
-  color: #fff;
+  background-color: var(--table-header-bg);
+  color: var(--primary-color);
   font-weight: normal;
-  border: none;
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  font-size: 13px !important;
+}
+
+.table tbody td {
+  padding: 8px;
+  font-size: 13px !important;
+  color: var(--text-dark);
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(246, 242, 234, 0.3);
+  background-color: #f8f9fa;
+}
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #dee2e6;
+}
+
+/* Table with primary header */
+.table-title {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 8px;
+  font-size: 13px !important;
+  margin-bottom: 0;
+}
+
+.table-title2 {
+  background-color: #c2c2c3;
+  color: var(--text-dark);
+  padding: 8px;
+  font-size: 13px !important;
 }
 
 /* Links */

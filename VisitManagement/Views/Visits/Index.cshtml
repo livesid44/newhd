@@ -4,48 +4,47 @@
     ViewData["Title"] = "Visits";
 }
 
-<div class="container mt-4">
-    <h1 class="mb-4">Visit Management</h1>
-    
+<div class="white-bg-main">
     <div class="row mb-3">
         <div class="col-md-6">
-            <p>
-                <a asp-action="Create" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Add New Visit
-                </a>
-            </p>
+            <h5 class="mb-0">Visit Management</h5>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
+            <a asp-action="Create" class="btn btn-primary float-end">
+                <i class="bi bi-plus-circle"></i> Add New Visit
+            </a>
+        </div>
+        <div class="col-md-3">
             <form asp-action="Index" method="get">
                 <div class="input-group">
-                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search visits...">
-                    <button type="submit" class="btn btn-outline-secondary">
-                        <i class="bi bi-search"></i> Search
-                    </button>
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control form-control-sm" placeholder="Search...">
+                    <span><i class="bi bi-search icon-search"></i></span>
                 </div>
             </form>
         </div>
     </div>
 
+    <div class="clear-20" style="height: 20px; clear: both;"></div>
+
     <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
+        <table class="table table-striped table-bordered">
+            <thead>
                 <tr>
                     <th>
-                        <a asp-action="Index" asp-route-sortOrder="@ViewData["AccountNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            Account Name
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["AccountNameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" style="text-decoration: none; color: inherit;">
+                            Account Name <i class="bi bi-funnel"></i>
                         </a>
                     </th>
                     <th>Type Of Visit</th>
                     <th>Sales SPOC</th>
                     <th>
-                        <a asp-action="Index" asp-route-sortOrder="@ViewData["VisitDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            Visit Date
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["VisitDateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" style="text-decoration: none; color: inherit;">
+                            Visit Date <i class="bi bi-funnel"></i>
                         </a>
                     </th>
                     <th>
-                        <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                            Status
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" style="text-decoration: none; color: inherit;">
+                            Status <i class="bi bi-funnel"></i>
                         </a>
                     </th>
                     <th>Location</th>
