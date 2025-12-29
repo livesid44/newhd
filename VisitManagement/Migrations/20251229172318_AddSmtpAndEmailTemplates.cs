@@ -13,13 +13,6 @@ namespace VisitManagement.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "CreatedBy",
-                table: "Visits",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.CreateTable(
                 name: "EmailTemplates",
                 columns: table => new
@@ -95,15 +88,15 @@ namespace VisitManagement.Migrations
                 table: "Visits",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedBy", "CreatedDate" },
-                values: new object[] { "admin@visitmanagement.com", new DateTime(2025, 12, 29, 17, 23, 18, 16, DateTimeKind.Local).AddTicks(5884) });
+                column: "CreatedDate",
+                value: new DateTime(2025, 12, 29, 17, 23, 18, 16, DateTimeKind.Local).AddTicks(5884));
 
             migrationBuilder.UpdateData(
                 table: "Visits",
                 keyColumn: "Id",
                 keyValue: 2,
-                columns: new[] { "CreatedBy", "CreatedDate" },
-                values: new object[] { "admin@visitmanagement.com", new DateTime(2025, 12, 29, 17, 23, 18, 16, DateTimeKind.Local).AddTicks(5890) });
+                column: "CreatedDate",
+                value: new DateTime(2025, 12, 29, 17, 23, 18, 16, DateTimeKind.Local).AddTicks(5890));
         }
 
         /// <inheritdoc />
@@ -114,10 +107,6 @@ namespace VisitManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "SmtpSettings");
-
-            migrationBuilder.DropColumn(
-                name: "CreatedBy",
-                table: "Visits");
 
             migrationBuilder.UpdateData(
                 table: "VisitUsers",
