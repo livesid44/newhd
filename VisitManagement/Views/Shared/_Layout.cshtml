@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VisitManagement</title>
+    <title>@ViewData["Title"] - Visit Management System</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -11,9 +11,11 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Visits" asp-action="Index">Visit Management System</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Visits" asp-action="Index">
+                    <img src="~/images/logo.png" alt="Logo" style="height: 25px; width: auto;" />
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,10 +25,14 @@
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Visits" asp-action="Index">Visits</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Visits" asp-action="Index">
+                                    <i class="bi bi-calendar-check"></i> Visits
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">
+                                    <i class="bi bi-people"></i> Users
+                                </a>
                             </li>
                         }
                     </ul>
@@ -35,7 +41,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i> @User.Identity.Name
+                                    <i class="bi bi-person-circle user-pic"></i> @User.Identity.Name
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                     <li>
@@ -47,6 +53,9 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item">
+                                <img class="techm-logo" src="~/images/techm.png" alt="TechMahindra" />
+                            </li>
                         }
                         else
                         {
@@ -55,21 +64,24 @@
                                     <i class="bi bi-box-arrow-in-right"></i> Login
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <img class="techm-logo" src="~/images/techm.png" alt="TechMahindra" />
+                            </li>
                         }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container" style="margin-top: 80px;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="footer text-center">
         <div class="container">
-            &copy; 2025 - Visit Management System
+            <span class="text-muted">&copy; 2025 - Visit Management System - Powered by Tech Mahindra</span>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
