@@ -1,0 +1,103 @@
+@model VisitManagement.Models.Visit
+
+@{
+    ViewData["Title"] = "Visit Details";
+}
+
+<div class="container mt-4">
+    <h1>Visit Details</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.SerialNumber)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.SerialNumber)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.TypeOfVisit)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.TypeOfVisit)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.Vertical)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.Vertical)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.SalesSpoc)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.SalesSpoc)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.AccountName)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.AccountName)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.DebitingProjectId)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.DebitingProjectId)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.OpportunityDetails)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.OpportunityDetails)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.OpportunityType)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.OpportunityType)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.ServiceScope)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.ServiceScope)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.SalesStage)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.SalesStage)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.TcvMnUsd)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.TcvMnUsd)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.VisitStatus)</dt>
+                <dd class="col-sm-7">
+                    @if (Model.VisitStatus == VisitManagement.Models.VisitStatus.Confirmed)
+                    {
+                        <span class="badge bg-success">Confirmed</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Tentative</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-6">
+            <dl class="row">
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.VisitType)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VisitType)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.VisitDate)</dt>
+                <dd class="col-sm-7">@Model.VisitDate.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.IntimationDate)</dt>
+                <dd class="col-sm-7">@Model.IntimationDate.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.Location)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.Location)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.Site)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.Site)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.VisitorsName)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VisitorsName)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.NumberOfAttendees)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.NumberOfAttendees)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.LevelOfVisitors)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.LevelOfVisitors)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.VisitDuration)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VisitDuration)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.VisitLead)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.VisitLead)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.KeyMessages)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.KeyMessages)</dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.Remarks)</dt>
+                <dd class="col-sm-7">@Html.DisplayFor(model => model.Remarks)</dd>
+            </dl>
+        </div>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>

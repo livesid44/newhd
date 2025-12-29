@@ -1,0 +1,224 @@
+@model VisitManagement.Models.Visit
+
+@{
+    ViewData["Title"] = "Create Visit";
+}
+
+<div class="container mt-4">
+    <h1>Create Visit</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="SerialNumber" class="control-label"></label>
+                            <input asp-for="SerialNumber" class="form-control" />
+                            <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="TypeOfVisit" class="control-label"></label>
+                            <input asp-for="TypeOfVisit" class="form-control" />
+                            <span asp-validation-for="TypeOfVisit" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="Vertical" class="control-label"></label>
+                            <input asp-for="Vertical" class="form-control" />
+                            <span asp-validation-for="Vertical" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="SalesSpoc" class="control-label"></label>
+                            <input asp-for="SalesSpoc" class="form-control" />
+                            <span asp-validation-for="SalesSpoc" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="AccountName" class="control-label"></label>
+                            <input asp-for="AccountName" class="form-control" />
+                            <span asp-validation-for="AccountName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="DebitingProjectId" class="control-label"></label>
+                            <input asp-for="DebitingProjectId" class="form-control" />
+                            <span asp-validation-for="DebitingProjectId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="OpportunityDetails" class="control-label"></label>
+                    <textarea asp-for="OpportunityDetails" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="OpportunityDetails" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="OpportunityType" class="control-label"></label>
+                            <select asp-for="OpportunityType" class="form-select" asp-items="Html.GetEnumSelectList<VisitManagement.Models.OpportunityType>()">
+                                <option value="">-- Select Opportunity Type --</option>
+                            </select>
+                            <span asp-validation-for="OpportunityType" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="ServiceScope" class="control-label"></label>
+                            <input asp-for="ServiceScope" class="form-control" />
+                            <span asp-validation-for="ServiceScope" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="SalesStage" class="control-label"></label>
+                            <input asp-for="SalesStage" class="form-control" />
+                            <span asp-validation-for="SalesStage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="TcvMnUsd" class="control-label"></label>
+                            <input asp-for="TcvMnUsd" class="form-control" type="number" step="0.01" />
+                            <span asp-validation-for="TcvMnUsd" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="VisitStatus" class="control-label"></label>
+                            <select asp-for="VisitStatus" class="form-select" asp-items="Html.GetEnumSelectList<VisitManagement.Models.VisitStatus>()">
+                                <option value="">-- Select Visit Status --</option>
+                            </select>
+                            <span asp-validation-for="VisitStatus" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="VisitType" class="control-label"></label>
+                            <input asp-for="VisitType" class="form-control" />
+                            <span asp-validation-for="VisitType" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="VisitDate" class="control-label"></label>
+                            <input asp-for="VisitDate" class="form-control" type="date" />
+                            <span asp-validation-for="VisitDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="IntimationDate" class="control-label"></label>
+                            <input asp-for="IntimationDate" class="form-control" type="date" />
+                            <span asp-validation-for="IntimationDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="Location" class="control-label"></label>
+                            <input asp-for="Location" class="form-control" />
+                            <span asp-validation-for="Location" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="Site" class="control-label"></label>
+                            <input asp-for="Site" class="form-control" />
+                            <span asp-validation-for="Site" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="VisitorsName" class="control-label"></label>
+                    <input asp-for="VisitorsName" class="form-control" />
+                    <span asp-validation-for="VisitorsName" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="NumberOfAttendees" class="control-label"></label>
+                            <input asp-for="NumberOfAttendees" class="form-control" type="number" />
+                            <span asp-validation-for="NumberOfAttendees" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="LevelOfVisitors" class="control-label"></label>
+                            <input asp-for="LevelOfVisitors" class="form-control" />
+                            <span asp-validation-for="LevelOfVisitors" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="VisitDuration" class="control-label"></label>
+                            <input asp-for="VisitDuration" class="form-control" />
+                            <span asp-validation-for="VisitDuration" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="VisitLead" class="control-label"></label>
+                            <input asp-for="VisitLead" class="form-control" />
+                            <span asp-validation-for="VisitLead" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="KeyMessages" class="control-label"></label>
+                    <textarea asp-for="KeyMessages" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="KeyMessages" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Remarks" class="control-label"></label>
+                    <textarea asp-for="Remarks" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
