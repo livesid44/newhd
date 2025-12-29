@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using VisitManagement.Models;
 
 namespace VisitManagement.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -11,7 +12,7 @@ namespace VisitManagement.Data
         }
 
         public DbSet<Visit> Visits { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> VisitUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -36,7 +36,7 @@ namespace VisitManagement.Tests
                 IsActive = true
             };
 
-            context.Users.Add(user);
+            context.VisitUsers.Add(user);
             await context.SaveChangesAsync();
 
             // Act
@@ -70,7 +70,7 @@ namespace VisitManagement.Tests
             // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
-            Assert.Single(context.Users);
+            Assert.Single(context.VisitUsers);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace VisitManagement.Tests
                 IsActive = true
             };
 
-            context.Users.Add(user);
+            context.VisitUsers.Add(user);
             await context.SaveChangesAsync();
 
             // Act
@@ -133,7 +133,7 @@ namespace VisitManagement.Tests
                 IsActive = true
             };
 
-            context.Users.Add(user);
+            context.VisitUsers.Add(user);
             await context.SaveChangesAsync();
 
             // Act
@@ -142,7 +142,7 @@ namespace VisitManagement.Tests
             // Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
-            Assert.Empty(context.Users);
+            Assert.Empty(context.VisitUsers);
         }
 
         [Fact]
@@ -163,7 +163,7 @@ namespace VisitManagement.Tests
                 CreatedDate = DateTime.Now
             };
 
-            context.Users.Add(user);
+            context.VisitUsers.Add(user);
             await context.SaveChangesAsync();
 
             // Modify user
@@ -177,7 +177,7 @@ namespace VisitManagement.Tests
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
 
-            var updatedUser = await context.Users.FindAsync(1);
+            var updatedUser = await context.VisitUsers.FindAsync(1);
             Assert.Equal("Updated User", updatedUser.FullName);
             Assert.Equal("Manager", updatedUser.Role);
         }

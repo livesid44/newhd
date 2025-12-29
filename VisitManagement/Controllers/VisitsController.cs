@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitManagement.Data;
@@ -5,6 +6,7 @@ using VisitManagement.Models;
 
 namespace VisitManagement.Controllers
 {
+    [Authorize]
     public class VisitsController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitManagement.Data;
@@ -5,6 +6,7 @@ using VisitManagement.Models;
 
 namespace VisitManagement.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,7 +21,7 @@ namespace VisitManagement.Controllers
         {
             ViewData["CurrentFilter"] = searchString;
 
-            var users = from u in _context.Users
+            var users = from u in _context.VisitUsers
                        select u;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -40,7 +42,7 @@ namespace VisitManagement.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
+            var user = await _context.VisitUsers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
@@ -79,7 +81,7 @@ namespace VisitManagement.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.VisitUsers.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -128,7 +130,7 @@ namespace VisitManagement.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
+            var user = await _context.VisitUsers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (user == null)
             {
@@ -143,10 +145,10 @@ namespace VisitManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.VisitUsers.FindAsync(id);
             if (user != null)
             {
-                _context.Users.Remove(user);
+                _context.VisitUsers.Remove(user);
             }
 
             await _context.SaveChangesAsync();
@@ -155,7 +157,7 @@ namespace VisitManagement.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _context.VisitUsers.Any(e => e.Id == id);
         }
     }
 }
