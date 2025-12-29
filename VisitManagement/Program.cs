@@ -46,17 +46,29 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 var app = builder.Build();
 
-// Seed default admin user
+// Seed roles and default admin user
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var context = services.GetRequiredService<ApplicationDbContext>();
         
         // Ensure database is created
         context.Database.EnsureCreated();
+        
+        // Create roles if they don't exist
+        string[] roleNames = { "Admin", "User" };
+        foreach (var roleName in roleNames)
+        {
+            var roleExist = await roleManager.RoleExistsAsync(roleName);
+            if (!roleExist)
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+        }
         
         // Check if admin user exists
         var adminEmail = "admin@visitmanagement.com";
@@ -78,7 +90,16 @@ using (var scope = app.Services.CreateScope())
             
             if (result.Succeeded)
             {
-                // Optionally add to admin role here if roles are configured
+                // Add to Admin role
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+        else
+        {
+            // Ensure existing admin has Admin role
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
             }
         }
     }

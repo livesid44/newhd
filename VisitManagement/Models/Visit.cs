@@ -125,6 +125,10 @@ namespace VisitManagement.Models
 
         [Display(Name = "Modified Date")]
         public DateTime? ModifiedDate { get; set; }
+
+        [Required]
+        [Display(Name = "Created By")]
+        public string CreatedBy { get; set; } = string.Empty;
     }
 
     public enum OpportunityType

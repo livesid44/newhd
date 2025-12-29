@@ -27,6 +27,13 @@ namespace VisitManagement.Controllers
             var visits = from v in _context.Visits
                         select v;
 
+            // Role-based filtering: Users see only their own visits, Admins see all
+            if (!User.IsInRole("Admin"))
+            {
+                var userEmail = User.Identity?.Name;
+                visits = visits.Where(v => v.CreatedBy == userEmail);
+            }
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 visits = visits.Where(v => v.AccountName.Contains(searchString)
@@ -92,6 +99,7 @@ namespace VisitManagement.Controllers
             if (ModelState.IsValid)
             {
                 visit.CreatedDate = DateTime.Now;
+                visit.CreatedBy = User.Identity?.Name ?? "Unknown";
                 _context.Add(visit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -112,17 +120,30 @@ namespace VisitManagement.Controllers
             {
                 return NotFound();
             }
+
+            // Non-admin users can only edit their own visits
+            if (!User.IsInRole("Admin") && visit.CreatedBy != User.Identity?.Name)
+            {
+                return Forbid();
+            }
+
             return View(visit);
         }
 
         // POST: Visits/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages,CreatedDate")] Visit visit)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages,CreatedDate,CreatedBy")] Visit visit)
         {
             if (id != visit.Id)
             {
                 return NotFound();
+            }
+
+            // Non-admin users can only edit their own visits
+            if (!User.IsInRole("Admin") && visit.CreatedBy != User.Identity?.Name)
+            {
+                return Forbid();
             }
 
             if (ModelState.IsValid)
@@ -164,6 +185,12 @@ namespace VisitManagement.Controllers
                 return NotFound();
             }
 
+            // Non-admin users can only delete their own visits
+            if (!User.IsInRole("Admin") && visit.CreatedBy != User.Identity?.Name)
+            {
+                return Forbid();
+            }
+
             return View(visit);
         }
 
@@ -175,6 +202,12 @@ namespace VisitManagement.Controllers
             var visit = await _context.Visits.FindAsync(id);
             if (visit != null)
             {
+                // Non-admin users can only delete their own visits
+                if (!User.IsInRole("Admin") && visit.CreatedBy != User.Identity?.Name)
+                {
+                    return Forbid();
+                }
+
                 _context.Visits.Remove(visit);
             }
 

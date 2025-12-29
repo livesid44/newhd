@@ -86,7 +86,8 @@ namespace VisitManagement.Data
                     Remarks = "Important strategic meeting",
                     VisitLead = "Capability",
                     KeyMessages = "Demonstrate cloud capabilities and cost savings",
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "admin@visitmanagement.com"
                 },
                 new Visit
                 {
@@ -115,7 +116,8 @@ namespace VisitManagement.Data
                     Remarks = "Follow-up demo session",
                     VisitLead = "Sales",
                     KeyMessages = "Showcase platform scalability and security features",
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "admin@visitmanagement.com"
                 }
             );
         }
