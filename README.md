@@ -57,23 +57,28 @@ dotnet build
 
 ### 3. Configure Database Connection
 
-The application uses SQL Server LocalDB by default. If you want to use a different SQL Server instance, update the connection string in `VisitManagement/appsettings.json`:
+The application uses SQL Server LocalDB by default. The connection string in `VisitManagement/appsettings.json` is already configured:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=VisitManagementDB;Trusted_Connection=true;MultipleActiveResultSets=true"
+    "DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Database=VisitManagementDB;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Command Timeout=0"
   }
 }
 ```
 
+If you want to use a different SQL Server instance, update this connection string accordingly.
+
 ### 4. Create Database and Run Migrations
+
+The migrations are already created. Simply apply them to create the database:
 
 ```bash
 cd VisitManagement
-dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
+
+This will create the database with all tables and seed data (2 sample visits and 3 sample users).
 
 ### 5. Run the Application
 
@@ -192,6 +197,51 @@ Potential improvements for future versions:
 - Email notifications for visit confirmations
 - Calendar integration
 - Mobile app
+
+## Troubleshooting
+
+### Database Errors
+
+If you encounter the error `Invalid object name 'Visits'`, it means the database hasn't been created yet. Follow these steps:
+
+1. **Install EF Core Tools** (if not already installed):
+   ```bash
+   dotnet tool install --global dotnet-ef --version 8.0.0
+   ```
+
+2. **Navigate to the project folder**:
+   ```bash
+   cd VisitManagement
+   ```
+
+3. **Apply the migration to create the database**:
+   ```bash
+   dotnet ef database update
+   ```
+
+   This will create the database with all tables and seed data.
+
+### Decimal Precision Warning
+
+The warning about `TcvMnUsd` decimal precision has been resolved in the latest version. The property is now configured with `decimal(18,2)` precision in the database schema. If you see this warning:
+
+1. Ensure you're using the latest version of the code
+2. Remove old migrations if any: `dotnet ef migrations remove`
+3. Create a fresh migration: `dotnet ef migrations add InitialCreate`
+4. Update the database: `dotnet ef database update`
+
+### Connection String Issues
+
+The application uses SQL Server LocalDB with the following connection string:
+```
+Data Source=(localdb)\MSSQLLocalDB;Database=VisitManagementDB;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Command Timeout=0
+```
+
+If you encounter connection issues:
+- Ensure SQL Server LocalDB is installed
+- Verify the instance name matches `(localdb)\MSSQLLocalDB`
+- Check that Windows Authentication is enabled
+- Try running the application as Administrator
 
 ## Contributing
 

@@ -17,6 +17,11 @@ namespace VisitManagement.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            // Configure decimal precision for TcvMnUsd
+            modelBuilder.Entity<Visit>()
+                .Property(v => v.TcvMnUsd)
+                .HasPrecision(18, 2);
+
             // Seed data for Users
             modelBuilder.Entity<User>().HasData(
                 new User
