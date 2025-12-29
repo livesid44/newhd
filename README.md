@@ -95,21 +95,26 @@ The application will start and be accessible at:
 - HTTPS: `https://localhost:5001`
 - HTTP: `http://localhost:5000`
 
-### 6. Register and Login
+### 6. Login with Default Admin Account
 
-On first run, you'll be redirected to the login page. Click "Register here" to create a new account:
-- Enter your full name, email, and password
-- Password must be at least 8 characters with uppercase, lowercase, digit, and special character
-- After registration, you'll be automatically logged in
+The application automatically creates a default administrator account on first run. Use these credentials to login:
+
+- **Email**: `admin@visitmanagement.com`
+- **Password**: `Admin@123`
+
+On first run, you'll be redirected to the login page. Enter the credentials above to access the system.
 
 ## Authentication
 
 The application uses ASP.NET Core Identity for secure authentication:
 
+- **Default Admin User**: Pre-configured admin account created automatically on startup
+  - Email: `admin@visitmanagement.com`
+  - Password: `Admin@123`
 - **Login**: Access at `/Account/Login` or click "Login" in the navigation
-- **Register**: Access at `/Account/Register` or click "Register" in the navigation
 - **Logout**: Click on your username dropdown and select "Logout"
 - **Protected Routes**: Visit and User management pages require authentication
+- **No Public Registration**: Registration is disabled to prevent unauthorized access
 - **Security Features**:
   - Secure password hashing
   - Account lockout after 5 failed login attempts (15-minute lockout)
@@ -185,13 +190,10 @@ Manages user information:
 ### First Time Setup
 
 1. **Run the application** and you'll be redirected to the login page
-2. **Click "Register here"** to create your first account
-3. **Fill in the registration form**:
-   - Full Name
-   - Email (must be unique)
-   - Password (minimum 8 characters, must include uppercase, lowercase, digit, and special character)
-   - Confirm Password
-4. **After registration**, you'll be automatically logged in and redirected to the Visits page
+2. **Login with the default admin account**:
+   - Email: `admin@visitmanagement.com`
+   - Password: `Admin@123`
+3. **You'll be automatically logged in** and redirected to the Visits page
 
 ### Managing Visits
 
