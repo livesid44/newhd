@@ -472,6 +472,63 @@ a:hover {
   padding: 40px;
 }
 
+/* Form Styling from GoTasker ticketdetails.html */
+.clear-20 {
+  height: 20px;
+  width: 100%;
+  clear: both;
+}
+
+.text-red {
+  color: var(--primary-color) !important;
+}
+
+.btn-br {
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  font-weight: normal;
+  padding: 4px 10px !important;
+}
+
+.btn-br:hover {
+  background-color: var(--primary-color);
+  color: #fff !important;
+}
+
+.btn-m-r {
+  margin-right: 8px;
+}
+
+.form-group {
+  margin-bottom: 15px !important;
+}
+
+.form-group label {
+  font-weight: bold;
+  color: var(--text-gray) !important;
+  margin-bottom: 4px !important;
+  font-size: 13px;
+}
+
+.form-control-sm,
+.form-select-sm {
+  font-size: 13px;
+  padding: 4px 8px;
+  height: calc(1.5em + 0.5rem + 2px);
+}
+
+.border-full {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+/* Page Title Enhancement */
+.pg-title {
+  font-size: 16px !important;
+  font-weight: bold !important;
+  margin: 15px 0px 10px 0px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   body.navOpen {
