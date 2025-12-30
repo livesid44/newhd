@@ -31,6 +31,14 @@ namespace VisitManagement.Models
         [DataType(DataType.Password)]
         public string? Password { get; set; }
 
+        [Display(Name = "Default To Recipients")]
+        [MaxLength(500)]
+        public string? DefaultToRecipients { get; set; }
+
+        [Display(Name = "Default CC Recipients")]
+        [MaxLength(500)]
+        public string? DefaultCcRecipients { get; set; }
+
         [Display(Name = "Enable SSL")]
         public bool EnableSsl { get; set; } = true;
 

@@ -2,6 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace VisitManagement.Models
 {
+    public enum AuthenticationType
+    {
+        Password,
+        LDAP
+    }
+
     public class User
     {
         [Key]
@@ -25,6 +31,13 @@ namespace VisitManagement.Models
         [Display(Name = "Phone Number")]
         [MaxLength(20)]
         public string? PhoneNumber { get; set; }
+
+        [Display(Name = "Authentication Type")]
+        public AuthenticationType AuthType { get; set; } = AuthenticationType.Password;
+
+        [Display(Name = "LDAP User ID")]
+        [MaxLength(100)]
+        public string? LdapUserId { get; set; }
 
         [Display(Name = "Created Date")]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
