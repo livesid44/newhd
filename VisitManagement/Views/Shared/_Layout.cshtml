@@ -35,9 +35,9 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
-                                    <form asp-controller="Account" asp-action="Logout" method="post" class="px-3 py-1">
+                                    <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
                                         @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-link dropdown-item text-decoration-none p-0">
+                                        <button type="submit" class="dropdown-item">
                                             <i class="bi bi-box-arrow-right"></i> Logout
                                         </button>
                                     </form>

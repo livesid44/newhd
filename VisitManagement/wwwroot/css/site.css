@@ -30,7 +30,11 @@ body {
 }
 
 body.navOpen {
-  padding-left: 265px;
+  padding-left: 0;
+}
+
+body.navOpen .aura {
+  margin-left: 265px;
 }
 
 /* GoTasker Color Scheme */
@@ -52,10 +56,12 @@ body.navOpen {
 
 .aura {
   margin-top: 66px;
+  margin-left: 50px;
   padding-top: 20px;
   position: relative;
   z-index: 1;
   min-height: calc(100vh - 66px);
+  transition: margin-left 0.8s;
 }
 
 .aura .container-fluid {
