@@ -76,6 +76,10 @@ If you want to use a different SQL Server instance, update this connection strin
 
 ### 4. Create Database and Run Migrations
 
+You have two options to set up the database:
+
+#### Option A: Using Entity Framework Migrations (Recommended)
+
 The migrations are already created. Simply apply them to create the database:
 
 ```bash
@@ -84,6 +88,24 @@ dotnet ef database update
 ```
 
 This will create the database with all tables and seed data (2 sample visits and 3 sample users).
+
+**Note**: If you encounter issues with EF migrations, use Option B instead.
+
+#### Option B: Using SQL Script (Alternative)
+
+If you're experiencing issues with EF migrations, use the provided SQL setup script:
+
+1. **Using SQL Server Management Studio (SSMS)**:
+   - Open SSMS and connect to your SQL Server instance
+   - Open the file `Database/Setup-Database.sql`
+   - Execute the script (F5)
+
+2. **Using sqlcmd command line**:
+   ```bash
+   sqlcmd -S "(localdb)\MSSQLLocalDB" -E -i Database/Setup-Database.sql
+   ```
+
+See [Database/README.md](Database/README.md) for detailed instructions.
 
 ### 5. Run the Application
 
@@ -351,9 +373,31 @@ Potential improvements for future versions:
 
 ## Troubleshooting
 
-### Database Errors
+### Database Errors / EF Migration Issues
 
-If you encounter the error `Invalid object name 'Visits'`, it means the database hasn't been created yet. Follow these steps:
+If you encounter errors like `Invalid object name 'Visits'` or issues running EF migrations, you have two options:
+
+#### Option 1: Use the SQL Setup Script (Recommended for troubleshooting)
+
+If you're experiencing migration issues, use the provided SQL script instead:
+
+1. **Navigate to the Database folder** and see [Database/README.md](Database/README.md) for detailed instructions
+
+2. **Quick setup using SSMS**:
+   - Open SQL Server Management Studio
+   - Connect to `(localdb)\MSSQLLocalDB` (or your SQL Server instance)
+   - Open and execute `Database/Setup-Database.sql`
+
+3. **Or use sqlcmd**:
+   ```bash
+   sqlcmd -S "(localdb)\MSSQLLocalDB" -E -i Database/Setup-Database.sql
+   ```
+
+The SQL script creates all tables, indexes, and inserts seed data without requiring EF tools.
+
+#### Option 2: Fix EF Migrations
+
+If you prefer to use EF migrations:
 
 1. **Install EF Core Tools** (if not already installed):
    ```bash
