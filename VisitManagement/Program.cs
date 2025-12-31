@@ -41,10 +41,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
+    options.Cookie.Path = "/visitpulse";
     options.ExpireTimeSpan = TimeSpan.FromHours(8);
-    options.LoginPath = "/Account/Login";
-    options.LogoutPath = "/Account/Logout";
-    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.LoginPath = "/visitpulse/Account/Login";
+    options.LogoutPath = "/visitpulse/Account/Logout";
+    options.AccessDeniedPath = "/visitpulse/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
 
@@ -115,6 +116,10 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+// Configure the application to run as a sub-application under /visitpulse
+// This must be set before other middleware to ensure all URL generation respects the path base
+app.UsePathBase("/visitpulse");
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
