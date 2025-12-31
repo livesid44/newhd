@@ -17,7 +17,7 @@ namespace VisitManagement.Migrations
                 type: "nvarchar(200)",
                 maxLength: 200,
                 nullable: false,
-                defaultValue: "system@visitmanagement.com");
+                defaultValue: "admin@visitmanagement.com");
 
             // Update seed data to include CreatedBy values
             migrationBuilder.UpdateData(
