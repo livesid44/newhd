@@ -72,7 +72,16 @@ sqlcmd -S YOUR_SERVER_NAME -U YOUR_USERNAME -P YOUR_PASSWORD -i Database/Setup-D
 ### Tables
 
 1. **VisitUsers** - System users for visit management
-2. **Visits** - Visit records with comprehensive details
+   - Fields: Id, FullName, Email, Role, PhoneNumber, AuthType, LdapUserId, CreatedDate, IsActive
+
+2. **Visits** - Visit records with comprehensive details (28 fields)
+   - Core: Id, SerialNumber, TypeOfVisit, Vertical, AccountName
+   - Opportunity: OpportunityDetails, OpportunityType (NN/EN), ServiceScope, SalesStage, TcvMnUsd
+   - Visit Details: VisitDate, IntimationDate, VisitStatus, VisitType, Location, Site
+   - Attendees: VisitorsName, NumberOfAttendees, LevelOfVisitors, VisitDuration
+   - Additional: VisitLead, KeyMessages, Remarks, SalesSpoc, DebitingProjectId
+   - **Audit**: CreatedDate, ModifiedDate, **CreatedBy** (newly added field)
+
 3. **AspNetUsers** - Identity framework users for authentication
 4. **AspNetRoles** - User roles
 5. **AspNetUserClaims** - User claims
