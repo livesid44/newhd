@@ -1,0 +1,216 @@
+@model VisitManagement.Models.Visit
+
+@{
+    ViewData["Title"] = "Create Visit";
+}
+
+<div class="pg-title">
+    Create Visit
+</div>
+<div class="white-bg-main">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="SerialNumber">Serial Number <span class="text-red">*</span></label>
+                    <input asp-for="SerialNumber" class="form-control form-control-sm" />
+                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="TypeOfVisit">Type Of Visit <span class="text-red">*</span></label>
+                    <input asp-for="TypeOfVisit" class="form-control form-control-sm" />
+                    <span asp-validation-for="TypeOfVisit" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="Vertical">Vertical <span class="text-red">*</span></label>
+                    <input asp-for="Vertical" class="form-control form-control-sm" />
+                    <span asp-validation-for="Vertical" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="SalesSpoc">Sales SPOC <span class="text-red">*</span></label>
+                    <input asp-for="SalesSpoc" class="form-control form-control-sm" />
+                    <span asp-validation-for="SalesSpoc" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="AccountName">Account Name <span class="text-red">*</span></label>
+                    <input asp-for="AccountName" class="form-control form-control-sm" />
+                    <span asp-validation-for="AccountName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="DebitingProjectId">Debiting Project ID</label>
+                    <input asp-for="DebitingProjectId" class="form-control form-control-sm" />
+                    <span asp-validation-for="DebitingProjectId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="OpportunityType">Opportunity Type <span class="text-red">*</span></label>
+                    <select asp-for="OpportunityType" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.OpportunityType>()">
+                        <option value="">-- Select --</option>
+                    </select>
+                    <span asp-validation-for="OpportunityType" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="ServiceScope">Service Scope</label>
+                    <input asp-for="ServiceScope" class="form-control form-control-sm" />
+                    <span asp-validation-for="ServiceScope" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="SalesStage">Sales Stage</label>
+                    <input asp-for="SalesStage" class="form-control form-control-sm" />
+                    <span asp-validation-for="SalesStage" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="TcvMnUsd">TCV (Mn USD)</label>
+                    <input asp-for="TcvMnUsd" class="form-control form-control-sm" type="number" step="0.01" />
+                    <span asp-validation-for="TcvMnUsd" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="VisitStatus">Visit Status <span class="text-red">*</span></label>
+                    <select asp-for="VisitStatus" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.VisitStatus>()">
+                        <option value="">-- Select --</option>
+                    </select>
+                    <span asp-validation-for="VisitStatus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="VisitType">Visit Type</label>
+                    <input asp-for="VisitType" class="form-control form-control-sm" />
+                    <span asp-validation-for="VisitType" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="VisitDate">Visit Date <span class="text-red">*</span></label>
+                    <input asp-for="VisitDate" class="form-control form-control-sm" type="date" />
+                    <span asp-validation-for="VisitDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="IntimationDate">Intimation Date</label>
+                    <input asp-for="IntimationDate" class="form-control form-control-sm" type="date" />
+                    <span asp-validation-for="IntimationDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="Location">Location</label>
+                    <input asp-for="Location" class="form-control form-control-sm" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="Site">Site</label>
+                    <input asp-for="Site" class="form-control form-control-sm" />
+                    <span asp-validation-for="Site" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="VisitorsName">Visitors Name</label>
+                    <input asp-for="VisitorsName" class="form-control form-control-sm" />
+                    <span asp-validation-for="VisitorsName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="NumberOfAttendees">Number Of Attendees</label>
+                    <input asp-for="NumberOfAttendees" class="form-control form-control-sm" type="number" />
+                    <span asp-validation-for="NumberOfAttendees" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="LevelOfVisitors">Level Of Visitors</label>
+                    <input asp-for="LevelOfVisitors" class="form-control form-control-sm" />
+                    <span asp-validation-for="LevelOfVisitors" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="VisitDuration">Visit Duration</label>
+                    <input asp-for="VisitDuration" class="form-control form-control-sm" />
+                    <span asp-validation-for="VisitDuration" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="VisitLead">Visit Lead</label>
+                    <input asp-for="VisitLead" class="form-control form-control-sm" />
+                    <span asp-validation-for="VisitLead" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="OpportunityDetails">Opportunity Details</label>
+                    <textarea asp-for="OpportunityDetails" class="form-control form-control-sm border-full" rows="2"></textarea>
+                    <span asp-validation-for="OpportunityDetails" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="KeyMessages">Key Messages</label>
+                    <textarea asp-for="KeyMessages" class="form-control form-control-sm border-full" rows="2"></textarea>
+                    <span asp-validation-for="KeyMessages" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="Remarks">Remarks</label>
+                    <textarea asp-for="Remarks" class="form-control form-control-sm border-full" rows="2"></textarea>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="clear-20"></div>
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-sm btn-danger btn-m-r">
+                Create
+            </button>
+            <a asp-action="Index" class="btn btn-sm btn-br btn-m-r">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Help Desk Report</title>
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/custom.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-icons.css" />
+  </head>
+  <body>
+  
+    <nav class="navbar navbar-expand-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="leadership.html">
+          <img class="micro-logo" src="images/logo.png" />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mynavbar"
+        >
+          <span class="navbar-toggler-icon"><i class="bi bi-list"></i></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynavbar">
+          <label class="logo me-auto"></label>
+          <form class="d-flex">
+            <div class="dropdown">
+              <button
+                type="button"
+                class="btn username dropdown-toggle"
+                data-bs-toggle="dropdown"
+              >
+                <img class="user-pic" src="images/user-pic.png" />Mohammad Ameer
+                Shaikh
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Link 1</a></li>
+                <li><a class="dropdown-item" href="#">Link 2</a></li>
+                <li><a class="dropdown-item" href="#">Link 3</a></li>
+              </ul>
+            </div>
+
+
+           <span class=" bell-icon"> <i class="bi bi-bell"></i>
+          <span class="bell-value">5</span>
+          </span>
+            <img class="techm" src="images/techm.png" />
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="aura">
+    <div class="sideNav">
+    
+      <ul class="list-unstyled">
+      <li style="background-color:#c1c1bf">
+          <a href="javascript: void(0);" class="toggleMenuLink">
+         <img src="images/menuIcons/icon1.png" alt="" />
+           <img src="images/menuIcons/icon1.png" alt="" /><span>Menu</span>
+        </a>
+      </li>
+        <li>
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon2.png" alt="" />
+            <img src="images/menuIcons/icon2.png" alt="" /> <span>Dashboard</span></a>
+         
+        </li>
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon3.png" alt="" />
+            <img src="images/menuIcons/icon3.png" alt="" /> <span>Super Admin</a></span>
+          
+        </li>
+
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon4.png" alt="" />
+            <img src="images/menuIcons/icon4.png" alt="" /> <span>Aura From Designer</a></span>
+        
+        </li>
+
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon5.png" alt="" />
+            <img src="images/menuIcons/icon5.png" alt="" /> <span>Aura Form</a></span>
+        
+        </li>
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon6.png" alt="" />
+            <img src="images/menuIcons/icon6.png" alt="" /> <span>KM</a></span>
+         
+        </li>
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon7.png" alt="" />
+            <img src="images/menuIcons/icon7.png" alt="" /> <span>Randomize</a></span>
+        
+        </li>
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon8.png" alt="" />
+            <img src="images/menuIcons/icon8.png" alt="" /> <span>Feedback</a></span>
+         
+        </li>
+
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon9.png" alt="" />
+            <img src="images/menuIcons/icon9.png" alt="" /> <span>Report</a></span>
+        
+        </li>
+
+
+
+        <li >
+          <a  href="javascript: void(0);"><img src="images/menuIcons/icon10.png" alt="" />
+            <img src="images/menuIcons/icon10.png" alt="" /> <span>Agent</a></span>
+        
+        </li>
+       
+        
+      </ul>
+    </div>
+
+      <div class="container-fluid">
+     
+        <button class="btn btn-fixed1"><i class="bi bi-plus"></i></button>
+         <button class="btn btn-fixed2"><i class="bi bi-funnel"></i></button>
+<div class="pg-title">
+ HelpDesk Assignment Report
+</div>
+        <div class="white-bg-main">
+        
+          <div class="row">
+            <div class="col-md-6">
+            
+                <h6>Ticket Destails</label>
+              
+            
+            </div>
+            <div class="col-md-3">
+               
+                   <div > <button class="btn btn-blue float-end">Export to Excel <i class="bi bi-file-earmark-excel"></i></button>
+            
+            </div>
+        </div>
+            <div class="col-md-3">
+            
+           <div class="form-group">
+              
+                <input type="search" placeholder="Search" class="form-control form-control-sm" />
+                <span><i class="bi bi-search icon-search"> </i></span>
+              </div>
+            
+            </div>
+           
+          </div>
+          <div class="clear-20"></div>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <tr>
+                <th>Sr. No <i class="bi bi-funnel"></i></th>
+                <th>Action<i class="bi bi-funnel"></i></th>
+                <th>Ticket Number<i class="bi bi-funnel"></i></th>
+                  <th>Mod..<i class="bi bi-funnel"></i></th>
+                    <th>Sub..<i class="bi bi-funnel"></i></th>
+                      <th>Other<i class="bi bi-funnel"></i></th>
+                        <th>Conc..<i class="bi bi-funnel"></i></th>
+                          <th>Proj..<i class="bi bi-funnel"></i></th>
+                            <th>Locat...<i class="bi bi-funnel"></i></th>
+                              <th>No.o..<i class="bi bi-funnel"></i></th>
+                                <th>Details<i class="bi bi-funnel"></i></th>
+                                  <th>Priori..<i class="bi bi-funnel"></i></th>
+                                    <th>Creat...<i class="bi bi-funnel"></i></th>
+                                      <th>Assign<i class="bi bi-funnel"></i></th>
+                                        <th>Assign<i class="bi bi-funnel"></i></th>
+              </tr>
+              <tr>
+                <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                <td></td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+                 <td>
+                  <input type="search" class="form-control"/>
+                  <i class="bi bi-search icon-search"></i>
+                </td>
+              </tr>
+              <tr>
+                <td>20</td>
+                <td class="tbl-icon"><a href="#"><img src="images/edit.png"/></a></td>
+                <td>Lorem Lpsum</td>
+                 <td>Lorem Lpsum</td>
+                  <td>Lorem Lpsum</td>
+                   <td>Lorem Lpsum</td>
+                    <td>Lorem Lpsum</td>
+                     <td>Lorem Lpsum</td>
+                      <td>Lorem Lpsum</td>
+                       <td>Lorem Lpsum</td>
+                        <td>Lorem Lpsum</td>
+                         <td>Lorem Lpsum</td>
+                          <td>Lorem Lpsum</td>
+                           <td>Lorem Lpsum</td>
+                            <td>Lorem Lpsum</td>
+              </tr>
+               <tr>
+                <td>20</td>
+                <td class="tbl-icon"><a href="#"><img src="images/edit.png"/></a></td>
+                <td>Lorem Lpsum</td>
+                 <td>Lorem Lpsum</td>
+                  <td>Lorem Lpsum</td>
+                   <td>Lorem Lpsum</td>
+                    <td>Lorem Lpsum</td>
+                     <td>Lorem Lpsum</td>
+                      <td>Lorem Lpsum</td>
+                       <td>Lorem Lpsum</td>
+                        <td>Lorem Lpsum</td>
+                         <td>Lorem Lpsum</td>
+                          <td>Lorem Lpsum</td>
+                           <td>Lorem Lpsum</td>
+                            <td>Lorem Lpsum</td>
+              </tr>
+               <tr>
+                <td>20</td>
+                <td class="tbl-icon"><a href="#"><img src="images/edit.png"/></a></td>
+                <td>Lorem Lpsum</td>
+                 <td>Lorem Lpsum</td>
+                  <td>Lorem Lpsum</td>
+                   <td>Lorem Lpsum</td>
+                    <td>Lorem Lpsum</td>
+                     <td>Lorem Lpsum</td>
+                      <td>Lorem Lpsum</td>
+                       <td>Lorem Lpsum</td>
+                        <td>Lorem Lpsum</td>
+                         <td>Lorem Lpsum</td>
+                          <td>Lorem Lpsum</td>
+                           <td>Lorem Lpsum</td>
+                            <td>Lorem Lpsum</td>
+              </tr>
+               <tr>
+                <td>20</td>
+                <td class="tbl-icon"><a href="#"><img src="images/edit.png"/></a></td>
+                <td>Lorem Lpsum</td>
+                 <td>Lorem Lpsum</td>
+                  <td>Lorem Lpsum</td>
+                   <td>Lorem Lpsum</td>
+                    <td>Lorem Lpsum</td>
+                     <td>Lorem Lpsum</td>
+                      <td>Lorem Lpsum</td>
+                       <td>Lorem Lpsum</td>
+                        <td>Lorem Lpsum</td>
+                         <td>Lorem Lpsum</td>
+                          <td>Lorem Lpsum</td>
+                           <td>Lorem Lpsum</td>
+                            <td>Lorem Lpsum</td>
+              </tr>
+               <tr>
+                <td>20</td>
+                <td class="tbl-icon"><a href="#"><img src="images/edit.png"/></a></td>
+                <td>Lorem Lpsum</td>
+                 <td>Lorem Lpsum</td>
+                  <td>Lorem Lpsum</td>
+                   <td>Lorem Lpsum</td>
+                    <td>Lorem Lpsum</td>
+                     <td>Lorem Lpsum</td>
+                      <td>Lorem Lpsum</td>
+                       <td>Lorem Lpsum</td>
+                        <td>Lorem Lpsum</td>
+                         <td>Lorem Lpsum</td>
+                          <td>Lorem Lpsum</td>
+                           <td>Lorem Lpsum</td>
+                            <td>Lorem Lpsum</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="clear-20"></div>
+
+     
+        
+      </div>
+    </div>
+  
+  </body>
+</html>

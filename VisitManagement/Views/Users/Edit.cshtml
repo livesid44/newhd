@@ -1,0 +1,126 @@
+@model VisitManagement.Models.User
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container-fluid mt-3">
+    <div class="white-bg-main p-4">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <h2 class="pg-title">Edit User</h2>
+            </div>
+        </div>
+
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedDate" />
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="FullName" class="control-label">Full Name <span class="text-red">*</span></label>
+                        <input asp-for="FullName" class="form-control form-control-sm" />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label">Email <span class="text-red">*</span></label>
+                        <input asp-for="Email" class="form-control form-control-sm" type="email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Role" class="control-label">Role <span class="text-red">*</span></label>
+                        <select asp-for="Role" class="form-select form-select-sm">
+                            <option value="">-- Select Role --</option>
+                            <option value="Admin">Admin</option>
+                            <option value="User">User</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+                        <input asp-for="PhoneNumber" class="form-control form-control-sm" type="tel" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear-20"></div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="AuthType" class="control-label">Authentication Type <span class="text-red">*</span></label>
+                        <select asp-for="AuthType" class="form-select form-select-sm" id="authTypeSelect">
+                            <option value="0">Password</option>
+                            <option value="1">LDAP</option>
+                        </select>
+                        <span asp-validation-for="AuthType" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-3" id="ldapUserIdGroup">
+                    <div class="form-group">
+                        <label asp-for="LdapUserId" class="control-label">LDAP User ID</label>
+                        <input asp-for="LdapUserId" class="form-control form-control-sm" placeholder="Enter LDAP User ID" />
+                        <span asp-validation-for="LdapUserId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="IsActive" class="control-label">Active</label>
+                        <div class="form-check" style="margin-top: 8px;">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label">Is Active</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear-20"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-sm btn-danger btn-m-r">
+                        <i class="bi bi-save"></i> Save
+                    </button>
+                    <a asp-action="Index" class="btn btn-sm btn-br">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            // Toggle LDAP User ID field based on authentication type
+            function toggleLdapField() {
+                if ($('#authTypeSelect').val() == '1') { // LDAP
+                    $('#ldapUserIdGroup').show();
+                } else {
+                    $('#ldapUserIdGroup').hide();
+                }
+            }
+
+            $('#authTypeSelect').on('change', toggleLdapField);
+            
+            // Trigger on page load
+            toggleLdapField();
+        });
+    </script>
+}

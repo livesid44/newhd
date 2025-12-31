@@ -1,0 +1,145 @@
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<div class="white-bg-main">
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h4 class="page-title">
+                <i class="bi bi-file-earmark-bar-graph"></i> Visit Reports
+            </h4>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-download"></i> Export Visit Data
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        Download visit data in CSV format. Use the date filters below to export specific date ranges.
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <span class="badge bg-success">Admin: Exporting all visits</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-info">User: Exporting your visits only</span>
+                        }
+                    </p>
+
+                    <form asp-action="ExportToExcel" method="post" class="mt-4">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="startDate" class="form-label">
+                                    <i class="bi bi-calendar-event"></i> Start Date
+                                </label>
+                                <input type="date" class="form-control" id="startDate" name="startDate">
+                                <small class="form-text text-muted">Leave empty for all dates</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="endDate" class="form-label">
+                                    <i class="bi bi-calendar-check"></i> End Date
+                                </label>
+                                <input type="date" class="form-control" id="endDate" name="endDate">
+                                <small class="form-text text-muted">Leave empty for all dates</small>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-file-earmark-spreadsheet"></i> Download CSV Report
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6 class="mb-3">
+                                <i class="bi bi-info-circle"></i> Report Information
+                            </h6>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i> 
+                                    <strong>CSV Format:</strong> Compatible with Excel, Google Sheets, and other spreadsheet applications
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i> 
+                                    <strong>All Fields Included:</strong> Complete visit data with all 25+ fields
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i> 
+                                    <strong>Date Format:</strong> Dates exported in DD/MM/YYYY format
+                                </li>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success"></i> 
+                                        <strong>Admin Access:</strong> Export includes all visits from all users with creator information
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="mb-2">
+                                        <i class="bi bi-check-circle text-success"></i> 
+                                        <strong>User Access:</strong> Export includes only your own visits
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="background-color: #0a0838; color: white;">
+                    <h5 class="mb-0">
+                        <i class="bi bi-question-circle"></i> Quick Start Guide
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-primary">
+                                <i class="bi bi-1-circle"></i> Select Date Range (Optional)
+                            </h6>
+                            <p class="text-muted">
+                                Choose a start and/or end date to filter the visits you want to export. 
+                                Leave both blank to export all visits.
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-primary">
+                                <i class="bi bi-2-circle"></i> Download Report
+                            </h6>
+                            <p class="text-muted">
+                                Click the "Download CSV Report" button. The file will download to your computer 
+                                and can be opened in Excel or any spreadsheet application.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Set max date to today for both date inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').setAttribute('max', today);
+            document.getElementById('endDate').setAttribute('max', today);
+        });
+    </script>
+}

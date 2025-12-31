@@ -1,0 +1,44 @@
+@model VisitManagement.Models.User
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container mt-4">
+    <h1>User Details</h1>
+    <hr />
+    <div>
+        <dl class="row">
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.FullName)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.FullName)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Role)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Role)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PhoneNumber)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.PhoneNumber)</dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsActive)</dt>
+            <dd class="col-sm-9">
+                @if (Model.IsActive)
+                {
+                    <span class="badge bg-success">Active</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Inactive</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+            <dd class="col-sm-9">@Model.CreatedDate.ToString("dd/MM/yyyy")</dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
