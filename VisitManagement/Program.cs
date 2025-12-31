@@ -116,15 +116,16 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+// Configure the application to run as a sub-application under /visitpulse
+// This must be set before other middleware to ensure all URL generation respects the path base
+app.UsePathBase("/visitpulse");
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-// Configure the application to run as a sub-application under /visitpulse
-app.UsePathBase("/visitpulse");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

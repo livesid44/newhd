@@ -274,8 +274,8 @@ app.UsePathBase("/visitpulse");
 
 **nginx Configuration Example**:
 ```nginx
-location /visitpulse {
-    proxy_pass http://localhost:5000;
+location /visitpulse/ {
+    proxy_pass http://localhost:5000/visitpulse/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection keep-alive;
