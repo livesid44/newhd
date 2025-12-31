@@ -41,6 +41,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
+    options.Cookie.Path = "/visitpulse";
     options.ExpireTimeSpan = TimeSpan.FromHours(8);
     options.LoginPath = "/Account/Login";
     options.LogoutPath = "/Account/Logout";
@@ -121,6 +122,9 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// Configure the application to run as a sub-application under /visitpulse
+app.UsePathBase("/visitpulse");
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

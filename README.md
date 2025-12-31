@@ -239,6 +239,105 @@ All forms include comprehensive client-side and server-side validation:
 - Input sanitization through DataAnnotations
 - Proper error handling and display
 
+## Deployment as Sub-Application
+
+The Visit Management System is configured to run as a sub-application under the path `/visitpulse`. This allows it to be hosted alongside other applications on the same server.
+
+### Configuration
+
+The application is pre-configured to work with the base path `/visitpulse`. The configuration is set in `Program.cs`:
+
+```csharp
+app.UsePathBase("/visitpulse");
+```
+
+### Deployment Options
+
+#### Option 1: IIS Sub-Application
+
+1. **Create Application in IIS**:
+   - Open IIS Manager
+   - Navigate to your website
+   - Right-click and select "Add Application"
+   - Set Alias to `visitpulse`
+   - Set Physical path to your application folder
+   - Select appropriate Application Pool (.NET 8.0)
+
+2. **Configure Application Pool**:
+   - Set .NET CLR Version to "No Managed Code"
+   - Set Managed Pipeline Mode to "Integrated"
+
+3. **Access the Application**:
+   - The application will be accessible at `https://yourdomain.com/visitpulse`
+
+#### Option 2: Reverse Proxy (nginx/Apache)
+
+**nginx Configuration Example**:
+```nginx
+location /visitpulse {
+    proxy_pass http://localhost:5000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection keep-alive;
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
+
+**Apache Configuration Example**:
+```apache
+ProxyPass /visitpulse http://localhost:5000/visitpulse
+ProxyPassReverse /visitpulse http://localhost:5000/visitpulse
+```
+
+#### Option 3: Docker Deployment
+
+Create a `Dockerfile` in the project root:
+```dockerfile
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY ["VisitManagement/VisitManagement.csproj", "VisitManagement/"]
+RUN dotnet restore "VisitManagement/VisitManagement.csproj"
+COPY . .
+WORKDIR "/src/VisitManagement"
+RUN dotnet build "VisitManagement.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "VisitManagement.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "VisitManagement.dll"]
+```
+
+Run with Docker:
+```bash
+docker build -t visitmanagement .
+docker run -d -p 5000:80 --name visitpulse visitmanagement
+```
+
+### Important Notes
+
+- All URLs in the application use ASP.NET Core tag helpers (e.g., `asp-controller`, `asp-action`), which automatically handle the base path
+- Static files (CSS, JavaScript, images) are served correctly under the `/visitpulse` path
+- Authentication cookies are configured with the correct path
+- No additional code changes are needed for deployment
+
+### Accessing the Application
+
+Once deployed as a sub-application:
+- Main URL: `https://yourdomain.com/visitpulse`
+- Login: `https://yourdomain.com/visitpulse/Account/Login`
+- Visits: `https://yourdomain.com/visitpulse/Visits`
+- Users: `https://yourdomain.com/visitpulse/Users`
+
 ## Future Enhancements
 
 Potential improvements for future versions:
