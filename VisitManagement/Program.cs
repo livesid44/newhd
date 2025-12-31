@@ -43,9 +43,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.Path = "/visitpulse";
     options.ExpireTimeSpan = TimeSpan.FromHours(8);
-    options.LoginPath = "/Account/Login";
-    options.LogoutPath = "/Account/Logout";
-    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.LoginPath = "/visitpulse/Account/Login";
+    options.LogoutPath = "/visitpulse/Account/Logout";
+    options.AccessDeniedPath = "/visitpulse/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
 
