@@ -10,13 +10,16 @@ namespace VisitManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IConfiguration _configuration;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -101,10 +104,12 @@ namespace VisitManagement.Controllers
             if (user == null)
             {
                 // Auto-provision new user from Active Directory
+                // Email domain configured in appsettings.json
+                var emailDomain = _configuration["WindowsAuth:EmailDomain"] ?? "domain.com";
                 user = new ApplicationUser
                 {
                     UserName = windowsIdentity,
-                    Email = $"{username}@domain.com", // You may want to query AD for actual email
+                    Email = $"{username}@{emailDomain}",
                     FullName = username,
                     EmailConfirmed = true,
                     AuthType = AuthenticationType.LDAP,
@@ -114,9 +119,17 @@ namespace VisitManagement.Controllers
 
                 var result = await _userManager.CreateAsync(user);
                 
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    // Add to default User role
+                    // Log error and return - do not attempt to sign in failed user
+                    return;
+                }
+
+                // Check if "User" role exists before adding
+                var roleExists = await _userManager.GetRolesAsync(user);
+                if (roleExists.Count == 0)
+                {
+                    // Add to default User role if it exists in the system
                     await _userManager.AddToRoleAsync(user, "User");
                 }
             }
