@@ -82,7 +82,7 @@ namespace VisitManagement.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Visits");
+                return RedirectToAction("Index", "Home");
             }
         }
     }
