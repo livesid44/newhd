@@ -95,23 +95,7 @@ namespace VisitManagement.Services
                 // Add template-specific recipients if template is provided
                 if (template != null)
                 {
-                    // Add To recipients from template
-                    if (!string.IsNullOrWhiteSpace(template.ToRecipients))
-                    {
-                        AddRecipients(message.To, template.ToRecipients);
-                    }
-
-                    // Add CC recipients from template
-                    if (!string.IsNullOrWhiteSpace(template.CcRecipients))
-                    {
-                        AddRecipients(message.CC, template.CcRecipients);
-                    }
-
-                    // Add BCC recipients from template
-                    if (!string.IsNullOrWhiteSpace(template.BccRecipients))
-                    {
-                        AddRecipients(message.Bcc, template.BccRecipients);
-                    }
+                    AddTemplateRecipients(message, template);
                 }
 
                 await smtpClient.SendMailAsync(message);
@@ -122,6 +106,27 @@ namespace VisitManagement.Services
             {
                 _logger.LogError(ex, $"Error sending email to {toEmail}");
                 return false;
+            }
+        }
+
+        private void AddTemplateRecipients(MailMessage message, EmailTemplate template)
+        {
+            // Add To recipients from template
+            if (!string.IsNullOrWhiteSpace(template.ToRecipients))
+            {
+                AddRecipients(message.To, template.ToRecipients);
+            }
+
+            // Add CC recipients from template
+            if (!string.IsNullOrWhiteSpace(template.CcRecipients))
+            {
+                AddRecipients(message.CC, template.CcRecipients);
+            }
+
+            // Add BCC recipients from template
+            if (!string.IsNullOrWhiteSpace(template.BccRecipients))
+            {
+                AddRecipients(message.Bcc, template.BccRecipients);
             }
         }
 
@@ -140,7 +145,11 @@ namespace VisitManagement.Services
                     {
                         collection.Add(trimmedEmail);
                     }
-                    catch (Exception ex)
+                    catch (FormatException ex)
+                    {
+                        _logger.LogWarning($"Invalid email address format: {trimmedEmail}. Error: {ex.Message}");
+                    }
+                    catch (ArgumentException ex)
                     {
                         _logger.LogWarning($"Invalid email address: {trimmedEmail}. Error: {ex.Message}");
                     }
