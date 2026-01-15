@@ -21,8 +21,16 @@ namespace VisitManagement.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string? returnUrl = null)
+        public async Task<IActionResult> Login(string? returnUrl = null)
         {
+            // Check if Windows Authentication is enabled and user is authenticated via Windows
+            if (User.Identity?.IsAuthenticated == true && User.Identity?.AuthenticationType == "Negotiate")
+            {
+                // Auto-provision or sign in the Windows authenticated user
+                await HandleWindowsAuthenticationAsync();
+                return RedirectToLocal(returnUrl);
+            }
+
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -72,6 +80,56 @@ namespace VisitManagement.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        private async Task HandleWindowsAuthenticationAsync()
+        {
+            if (User.Identity?.IsAuthenticated != true || User.Identity.Name == null)
+            {
+                return;
+            }
+
+            var windowsIdentity = User.Identity.Name;
+            // Extract username from domain\username format
+            var username = windowsIdentity.Contains('\\') 
+                ? windowsIdentity.Split('\\')[1] 
+                : windowsIdentity;
+
+            // Try to find existing user by LDAP user ID or username
+            var user = await _userManager.FindByNameAsync(windowsIdentity);
+            
+            if (user == null)
+            {
+                // Auto-provision new user from Active Directory
+                user = new ApplicationUser
+                {
+                    UserName = windowsIdentity,
+                    Email = $"{username}@domain.com", // You may want to query AD for actual email
+                    FullName = username,
+                    EmailConfirmed = true,
+                    AuthType = AuthenticationType.LDAP,
+                    LdapUserId = windowsIdentity,
+                    CreatedDate = DateTime.Now
+                };
+
+                var result = await _userManager.CreateAsync(user);
+                
+                if (result.Succeeded)
+                {
+                    // Add to default User role
+                    await _userManager.AddToRoleAsync(user, "User");
+                }
+            }
+            else if (user.AuthType != AuthenticationType.LDAP)
+            {
+                // Update existing user to LDAP auth type
+                user.AuthType = AuthenticationType.LDAP;
+                user.LdapUserId = windowsIdentity;
+                await _userManager.UpdateAsync(user);
+            }
+
+            // Sign in the user
+            await _signInManager.SignInAsync(user, isPersistent: false);
         }
 
         private IActionResult RedirectToLocal(string? returnUrl)
