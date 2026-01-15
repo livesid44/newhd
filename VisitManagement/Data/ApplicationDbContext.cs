@@ -25,40 +25,6 @@ namespace VisitManagement.Data
                 .Property(v => v.TcvMnUsd)
                 .HasPrecision(18, 2);
 
-            // Seed data for Users
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = 1,
-                    FullName = "John Doe",
-                    Email = "john.doe@example.com",
-                    Role = "Administrator",
-                    PhoneNumber = "+1-555-0100",
-                    CreatedDate = DateTime.Now,
-                    IsActive = true
-                },
-                new User
-                {
-                    Id = 2,
-                    FullName = "Jane Smith",
-                    Email = "jane.smith@example.com",
-                    Role = "Sales Manager",
-                    PhoneNumber = "+1-555-0101",
-                    CreatedDate = DateTime.Now,
-                    IsActive = true
-                },
-                new User
-                {
-                    Id = 3,
-                    FullName = "Bob Johnson",
-                    Email = "bob.johnson@example.com",
-                    Role = "Team Lead",
-                    PhoneNumber = "+1-555-0102",
-                    CreatedDate = DateTime.Now,
-                    IsActive = true
-                }
-            );
-
             // Seed data for Visits
             modelBuilder.Entity<Visit>().HasData(
                 new Visit
