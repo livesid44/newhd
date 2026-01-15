@@ -10,19 +10,30 @@ namespace VisitManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IConfiguration _configuration;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string? returnUrl = null)
+        public async Task<IActionResult> Login(string? returnUrl = null)
         {
+            // Check if Windows Authentication is enabled and user is authenticated via Windows
+            if (User.Identity?.IsAuthenticated == true && User.Identity?.AuthenticationType == "Negotiate")
+            {
+                // Auto-provision or sign in the Windows authenticated user
+                await HandleWindowsAuthenticationAsync();
+                return RedirectToLocal(returnUrl);
+            }
+
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -74,6 +85,66 @@ namespace VisitManagement.Controllers
             return View();
         }
 
+        private async Task HandleWindowsAuthenticationAsync()
+        {
+            if (User.Identity?.IsAuthenticated != true || User.Identity.Name == null)
+            {
+                return;
+            }
+
+            var windowsIdentity = User.Identity.Name;
+            // Extract username from domain\username format
+            var username = windowsIdentity.Contains('\\') 
+                ? windowsIdentity.Split('\\')[1] 
+                : windowsIdentity;
+
+            // Try to find existing user by LDAP user ID or username
+            var user = await _userManager.FindByNameAsync(windowsIdentity);
+            
+            if (user == null)
+            {
+                // Auto-provision new user from Active Directory
+                // Email domain configured in appsettings.json
+                var emailDomain = _configuration["WindowsAuth:EmailDomain"] ?? "domain.com";
+                user = new ApplicationUser
+                {
+                    UserName = windowsIdentity,
+                    Email = $"{username}@{emailDomain}",
+                    FullName = username,
+                    EmailConfirmed = true,
+                    AuthType = AuthenticationType.LDAP,
+                    LdapUserId = windowsIdentity,
+                    CreatedDate = DateTime.Now
+                };
+
+                var result = await _userManager.CreateAsync(user);
+                
+                if (!result.Succeeded)
+                {
+                    // Log error and return - do not attempt to sign in failed user
+                    return;
+                }
+
+                // Check if "User" role exists before adding
+                var roleExists = await _userManager.GetRolesAsync(user);
+                if (roleExists.Count == 0)
+                {
+                    // Add to default User role if it exists in the system
+                    await _userManager.AddToRoleAsync(user, "User");
+                }
+            }
+            else if (user.AuthType != AuthenticationType.LDAP)
+            {
+                // Update existing user to LDAP auth type
+                user.AuthType = AuthenticationType.LDAP;
+                user.LdapUserId = windowsIdentity;
+                await _userManager.UpdateAsync(user);
+            }
+
+            // Sign in the user
+            await _signInManager.SignInAsync(user, isPersistent: false);
+        }
+
         private IActionResult RedirectToLocal(string? returnUrl)
         {
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -82,7 +153,7 @@ namespace VisitManagement.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Visits");
+                return RedirectToAction("Index", "Home");
             }
         }
     }

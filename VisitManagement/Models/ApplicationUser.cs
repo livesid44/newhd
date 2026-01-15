@@ -6,5 +6,7 @@ namespace VisitManagement.Models
     {
         public string FullName { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public AuthenticationType AuthType { get; set; } = AuthenticationType.Password;
+        public string? LdapUserId { get; set; }
     }
 }

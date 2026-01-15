@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using VisitManagement.Data;
 using VisitManagement.Models;
 using VisitManagement.Services;
+using Microsoft.AspNetCore.Authentication.Negotiate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add Email Service
 builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Add Windows Authentication
+builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
+    .AddNegotiate();
 
 // Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
