@@ -50,21 +50,21 @@
                 <label asp-for="ToRecipients" class="form-label"></label>
                 <input asp-for="ToRecipients" class="form-control" placeholder="email1@example.com; email2@example.com" />
                 <span asp-validation-for="ToRecipients" class="text-danger"></span>
-                <small class="form-text text-muted">Separate multiple emails with semicolons (;). If left empty, email will be sent only to the visit creator.</small>
+                <small class="form-text text-muted">Separate multiple emails with semicolons (;) or commas (,). If left empty, email will be sent only to the visit creator.</small>
             </div>
 
             <div class="mb-3">
                 <label asp-for="CcRecipients" class="form-label"></label>
                 <input asp-for="CcRecipients" class="form-control" placeholder="cc1@example.com; cc2@example.com" />
                 <span asp-validation-for="CcRecipients" class="text-danger"></span>
-                <small class="form-text text-muted">Separate multiple emails with semicolons (;). Optional CC recipients.</small>
+                <small class="form-text text-muted">Separate multiple emails with semicolons (;) or commas (,). Optional CC recipients.</small>
             </div>
 
             <div class="mb-3">
                 <label asp-for="BccRecipients" class="form-label"></label>
                 <input asp-for="BccRecipients" class="form-control" placeholder="bcc1@example.com; bcc2@example.com" />
                 <span asp-validation-for="BccRecipients" class="text-danger"></span>
-                <small class="form-text text-muted">Separate multiple emails with semicolons (;). Optional BCC recipients.</small>
+                <small class="form-text text-muted">Separate multiple emails with semicolons (;) or commas (,). Optional BCC recipients.</small>
             </div>
 
             <div class="mb-3 form-check">
