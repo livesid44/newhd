@@ -64,7 +64,7 @@ namespace VisitManagement.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction(nameof(Login), "Account");
         }
 
         [HttpGet]
