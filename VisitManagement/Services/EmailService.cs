@@ -31,7 +31,7 @@ namespace VisitManagement.Services
             var subject = ReplacePlaceholders(template.Subject, visit);
             var body = ReplacePlaceholders(template.Body, visit);
 
-            return await SendEmailAsync(userEmail, subject, body);
+            return await SendEmailAsync(userEmail, subject, body, template);
         }
 
         public async Task<bool> SendVisitUpdatedEmailAsync(Visit visit, string userEmail)
@@ -48,7 +48,7 @@ namespace VisitManagement.Services
             var subject = ReplacePlaceholders(template.Subject, visit);
             var body = ReplacePlaceholders(template.Body, visit);
 
-            return await SendEmailAsync(userEmail, subject, body);
+            return await SendEmailAsync(userEmail, subject, body, template);
         }
 
         public async Task<bool> SendTestEmailAsync(string toEmail)
@@ -57,7 +57,7 @@ namespace VisitManagement.Services
                 "This is a test email to verify your SMTP configuration is working correctly.");
         }
 
-        private async Task<bool> SendEmailAsync(string toEmail, string subject, string body)
+        private async Task<bool> SendEmailAsync(string toEmail, string subject, string body, EmailTemplate? template = null)
         {
             try
             {
@@ -89,7 +89,14 @@ namespace VisitManagement.Services
                     IsBodyHtml = true
                 };
 
+                // Add primary recipient (the user who triggered the email)
                 message.To.Add(toEmail);
+
+                // Add template-specific recipients if template is provided
+                if (template != null)
+                {
+                    AddTemplateRecipients(message, template);
+                }
 
                 await smtpClient.SendMailAsync(message);
                 _logger.LogInformation($"Email sent successfully to {toEmail}");
@@ -99,6 +106,54 @@ namespace VisitManagement.Services
             {
                 _logger.LogError(ex, $"Error sending email to {toEmail}");
                 return false;
+            }
+        }
+
+        private void AddTemplateRecipients(MailMessage message, EmailTemplate template)
+        {
+            // Add To recipients from template
+            if (!string.IsNullOrWhiteSpace(template.ToRecipients))
+            {
+                AddRecipients(message.To, template.ToRecipients);
+            }
+
+            // Add CC recipients from template
+            if (!string.IsNullOrWhiteSpace(template.CcRecipients))
+            {
+                AddRecipients(message.CC, template.CcRecipients);
+            }
+
+            // Add BCC recipients from template
+            if (!string.IsNullOrWhiteSpace(template.BccRecipients))
+            {
+                AddRecipients(message.Bcc, template.BccRecipients);
+            }
+        }
+
+        private void AddRecipients(MailAddressCollection collection, string recipients)
+        {
+            if (string.IsNullOrWhiteSpace(recipients))
+                return;
+
+            var emails = recipients.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var email in emails)
+            {
+                var trimmedEmail = email.Trim();
+                if (!string.IsNullOrEmpty(trimmedEmail))
+                {
+                    try
+                    {
+                        collection.Add(trimmedEmail);
+                    }
+                    catch (FormatException ex)
+                    {
+                        _logger.LogWarning($"Invalid email address format: {trimmedEmail}. Error: {ex.Message}");
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        _logger.LogWarning($"Invalid email address: {trimmedEmail}. Error: {ex.Message}");
+                    }
+                }
             }
         }
 
