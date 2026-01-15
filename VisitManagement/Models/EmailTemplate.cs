@@ -23,6 +23,18 @@ namespace VisitManagement.Models
         [DataType(DataType.MultilineText)]
         public string Body { get; set; } = string.Empty;
 
+        [Display(Name = "To Recipients")]
+        [MaxLength(500)]
+        public string? ToRecipients { get; set; }
+
+        [Display(Name = "CC Recipients")]
+        [MaxLength(500)]
+        public string? CcRecipients { get; set; }
+
+        [Display(Name = "BCC Recipients")]
+        [MaxLength(500)]
+        public string? BccRecipients { get; set; }
+
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; } = true;
 
