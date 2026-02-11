@@ -100,6 +100,10 @@ namespace VisitManagement.Controllers
             {
                 visit.CreatedDate = DateTime.Now;
                 visit.CreatedBy = User.Identity?.Name ?? "Unknown";
+                
+                // Automatically determine visit category
+                visit.Category = DetermineVisitCategory(visit);
+                
                 _context.Add(visit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -151,6 +155,10 @@ namespace VisitManagement.Controllers
                 try
                 {
                     visit.ModifiedDate = DateTime.Now;
+                    
+                    // Re-evaluate category if TCV or visitor level changed
+                    visit.Category = DetermineVisitCategory(visit);
+                    
                     _context.Update(visit);
                     await _context.SaveChangesAsync();
                 }
@@ -218,6 +226,30 @@ namespace VisitManagement.Controllers
         private bool VisitExists(int id)
         {
             return _context.Visits.Any(e => e.Id == id);
+        }
+
+        private VisitCategory DetermineVisitCategory(Visit visit)
+        {
+            // Automatic categorization based on TCV and visitor level
+            var tcvInMillion = visit.TcvMnUsd;
+            var visitorLevel = visit.LevelOfVisitors?.ToLower() ?? "";
+
+            // Platinum: CXO involvement + >$20M opportunity OR C-Level visitors + >$15M
+            if ((visitorLevel.Contains("c-level") || visitorLevel.Contains("cxo") || visitorLevel.Contains("ceo") || 
+                 visitorLevel.Contains("cfo") || visitorLevel.Contains("cto")) && tcvInMillion >= 15)
+            {
+                return VisitCategory.Platinum;
+            }
+
+            // Gold: VP/Senior Leaders + $10-20M OR high-value opportunities
+            if ((visitorLevel.Contains("vp") || visitorLevel.Contains("vice president") || 
+                 visitorLevel.Contains("senior") || visitorLevel.Contains("director")) && tcvInMillion >= 10)
+            {
+                return VisitCategory.Gold;
+            }
+
+            // Silver: All others
+            return VisitCategory.Silver;
         }
     }
 }

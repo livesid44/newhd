@@ -62,6 +62,9 @@ namespace VisitManagement.Models
         [Display(Name = "Visit Status")]
         public VisitStatus VisitStatus { get; set; }
 
+        [Display(Name = "Visit Category")]
+        public VisitCategory? Category { get; set; }
+
         [Required]
         [Display(Name = "Visit Type")]
         [MaxLength(200)]

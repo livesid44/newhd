@@ -15,6 +15,9 @@ namespace VisitManagement.Data
         public DbSet<User> VisitUsers { get; set; }
         public DbSet<SmtpSettings> SmtpSettings { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<TaskAssignment> TaskAssignments { get; set; }
+        public DbSet<Checklist> Checklists { get; set; }
+        public DbSet<Stakeholder> Stakeholders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -174,6 +177,70 @@ namespace VisitManagement.Data
                     IsActive = true,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now
+                }
+            );
+
+            // Seed data for Stakeholders
+            modelBuilder.Entity<Stakeholder>().HasData(
+                new Stakeholder
+                {
+                    Id = 1,
+                    FullName = "Client Experience Team Lead",
+                    Email = "ce.lead@techmahindra.com",
+                    PhoneNumber = "+1-555-0200",
+                    Team = "Client Experience",
+                    Role = "Team Lead",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 2,
+                    FullName = "Marketing Manager",
+                    Email = "marketing.manager@techmahindra.com",
+                    PhoneNumber = "+1-555-0201",
+                    Team = "Marketing",
+                    Role = "Manager",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 3,
+                    FullName = "Creative Hub Lead",
+                    Email = "creative.lead@techmahindra.com",
+                    PhoneNumber = "+1-555-0202",
+                    Team = "Creative Hub",
+                    Role = "Lead",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 4,
+                    FullName = "Customer Success Manager",
+                    Email = "cs.manager@techmahindra.com",
+                    PhoneNumber = "+1-555-0203",
+                    Team = "Customer Success",
+                    Role = "Manager",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 5,
+                    FullName = "TIM Coordinator",
+                    Email = "tim.coordinator@techmahindra.com",
+                    PhoneNumber = "+1-555-0204",
+                    Team = "TIM",
+                    Role = "Coordinator",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
                 }
             );
         }
