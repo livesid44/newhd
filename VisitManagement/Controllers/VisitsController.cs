@@ -53,12 +53,6 @@ namespace VisitManagement.Controllers
                 case "date_desc":
                     visits = visits.OrderByDescending(v => v.VisitDate);
                     break;
-                case "Status":
-                    visits = visits.OrderBy(v => v.VisitStatus);
-                    break;
-                case "status_desc":
-                    visits = visits.OrderByDescending(v => v.VisitStatus);
-                    break;
                 default:
                     visits = visits.OrderBy(v => v.AccountName);
                     break;
@@ -95,20 +89,24 @@ namespace VisitManagement.Controllers
         // POST: Visits/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages")] Visit visit)
+        public async Task<IActionResult> Create([Bind("Id,VisitDate,TypeOfVisit,OpportunityType,SalesStage,AccountName,Category,Geo,Location,LocationCsSpoc,SalesSpoc,Vertical,VerticalHead,AccountOwner,Horizontal,HorizontalHead,ClientsCountryOfOrigin,DebitingProjectId,TcvMnUsd,NameAndNoOfAttendees,VisitDuration,AdditionalInformation,Repository")] Visit visit)
         {
             if (ModelState.IsValid)
             {
                 visit.CreatedDate = DateTime.Now;
                 visit.CreatedBy = User.Identity?.Name ?? "Unknown";
                 
-                // Automatically determine visit category
-                visit.Category = DetermineVisitCategory(visit);
+                // Automatically determine visit category if not set
+                if (!visit.Category.HasValue)
+                {
+                    visit.Category = DetermineVisitCategory(visit);
+                }
                 
                 _context.Add(visit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            PopulateDropdownData();
             return View(visit);
         }
 
@@ -139,7 +137,7 @@ namespace VisitManagement.Controllers
         // POST: Visits/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages,CreatedDate,CreatedBy")] Visit visit)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VisitDate,TypeOfVisit,OpportunityType,SalesStage,AccountName,Category,Geo,Location,LocationCsSpoc,SalesSpoc,Vertical,VerticalHead,AccountOwner,Horizontal,HorizontalHead,ClientsCountryOfOrigin,DebitingProjectId,TcvMnUsd,NameAndNoOfAttendees,VisitDuration,AdditionalInformation,Repository,CreatedDate,CreatedBy")] Visit visit)
         {
             if (id != visit.Id)
             {
@@ -158,8 +156,11 @@ namespace VisitManagement.Controllers
                 {
                     visit.ModifiedDate = DateTime.Now;
                     
-                    // Re-evaluate category if TCV or visitor level changed
-                    visit.Category = DetermineVisitCategory(visit);
+                    // Re-evaluate category if not set or TCV changed
+                    if (!visit.Category.HasValue)
+                    {
+                        visit.Category = DetermineVisitCategory(visit);
+                    }
                     
                     _context.Update(visit);
                     await _context.SaveChangesAsync();
@@ -177,6 +178,7 @@ namespace VisitManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            PopulateDropdownData();
             return View(visit);
         }
 
@@ -263,11 +265,14 @@ namespace VisitManagement.Controllers
                 "Closed Lost"
             };
 
-            ViewBag.VisitTypeList = new List<string>
+            ViewBag.GeoList = new List<string>
             {
-                "On-site",
-                "Virtual",
-                "Hybrid"
+                "North America",
+                "Europe",
+                "Asia Pacific",
+                "Middle East",
+                "India",
+                "Others"
             };
 
             ViewBag.LocationList = new List<string>
@@ -286,55 +291,48 @@ namespace VisitManagement.Controllers
                 "Others"
             };
 
-            ViewBag.SiteList = new List<string>
+            ViewBag.HorizontalList = new List<string>
             {
-                "Hinjewadi",
-                "Magarpatta",
-                "Whitefield",
-                "HITEC City",
-                "OMR",
-                "Gurgaon",
-                "Noida",
+                "Digital Transformation",
+                "Cloud Services",
+                "AI/ML",
+                "Cybersecurity",
+                "Infrastructure",
+                "Application Development",
                 "Others"
             };
 
-            ViewBag.LevelOfVisitorsList = new List<string>
+            ViewBag.CountryList = new List<string>
             {
-                "C-Level/CXO",
-                "VP Level",
-                "Director Level",
-                "Manager Level",
-                "Team Lead",
-                "Individual Contributor",
-                "Others"
-            };
-
-            ViewBag.VisitLeadList = new List<string>
-            {
-                "Capability",
-                "Sales",
-                "Marketing",
-                "Delivery",
+                "United States",
+                "United Kingdom",
+                "Germany",
+                "France",
+                "India",
+                "Singapore",
+                "UAE",
+                "Canada",
+                "Australia",
                 "Others"
             };
         }
 
         private VisitCategory DetermineVisitCategory(Visit visit)
         {
-            // Automatic categorization based on TCV and visitor level
+            // Automatic categorization based on TCV and name/attendees info
             var tcvInMillion = visit.TcvMnUsd;
-            var visitorLevel = visit.LevelOfVisitors?.ToLower() ?? "";
+            var nameAndAttendees = visit.NameAndNoOfAttendees?.ToLower() ?? "";
 
             // Platinum: CXO involvement + >$20M opportunity OR C-Level visitors + >$15M
-            if ((visitorLevel.Contains("c-level") || visitorLevel.Contains("cxo") || visitorLevel.Contains("ceo") || 
-                 visitorLevel.Contains("cfo") || visitorLevel.Contains("cto")) && tcvInMillion >= 15)
+            if ((nameAndAttendees.Contains("c-level") || nameAndAttendees.Contains("cxo") || nameAndAttendees.Contains("ceo") || 
+                 nameAndAttendees.Contains("cfo") || nameAndAttendees.Contains("cto")) && tcvInMillion >= 15)
             {
                 return VisitCategory.Platinum;
             }
 
             // Gold: VP/Senior Leaders + $10-20M OR high-value opportunities
-            if ((visitorLevel.Contains("vp") || visitorLevel.Contains("vice president") || 
-                 visitorLevel.Contains("senior") || visitorLevel.Contains("director")) && tcvInMillion >= 10)
+            if ((nameAndAttendees.Contains("vp") || nameAndAttendees.Contains("vice president") || 
+                 nameAndAttendees.Contains("senior") || nameAndAttendees.Contains("director")) && tcvInMillion >= 10)
             {
                 return VisitCategory.Gold;
             }

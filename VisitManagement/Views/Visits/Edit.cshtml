@@ -10,15 +10,14 @@
 <div class="white-bg-main">
     <form asp-action="Edit">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="CreatedDate" />
         
+        <!-- Row 1: Visit Date, Type Of Visit, Opportunity Type, Sales Stage -->
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="SerialNumber">Serial Number <span class="text-red">*</span></label>
-                    <input asp-for="SerialNumber" class="form-control form-control-sm" />
-                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                    <label asp-for="VisitDate">Visit Date (DD/MM/YY) <span class="text-red">*</span></label>
+                    <input asp-for="VisitDate" class="form-control form-control-sm" type="date" />
+                    <span asp-validation-for="VisitDate" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
@@ -36,6 +35,92 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
+                    <label asp-for="OpportunityType">Opportunity Type <span class="text-red">*</span></label>
+                    <select asp-for="OpportunityType" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.OpportunityType>()">
+                        <option value="">-- Select --</option>
+                    </select>
+                    <span asp-validation-for="OpportunityType" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="SalesStage">Sales Stage <span class="text-red">*</span></label>
+                    <select asp-for="SalesStage" class="form-select form-select-sm">
+                        <option value="">-- Select Stage --</option>
+                        @foreach (var item in ViewBag.SalesStageList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="SalesStage" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Client name, Visit Category, Geo, Location -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="AccountName">Client name <span class="text-red">*</span></label>
+                    <input asp-for="AccountName" class="form-control form-control-sm" />
+                    <span asp-validation-for="AccountName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="Category">Visit Category</label>
+                    <select asp-for="Category" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.VisitCategory>()">
+                        <option value="">-- Auto-assigned --</option>
+                    </select>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="Geo">Geo</label>
+                    <select asp-for="Geo" class="form-select form-select-sm">
+                        <option value="">-- Select Geo --</option>
+                        @foreach (var item in ViewBag.GeoList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Geo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="Location">Location <span class="text-red">*</span></label>
+                    <select asp-for="Location" class="form-select form-select-sm">
+                        <option value="">-- Select Location --</option>
+                        @foreach (var item in ViewBag.LocationList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Location CS spoc, Sales SPOC, Vertical, Vertical Head -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="LocationCsSpoc">Location CS spoc</label>
+                    <input asp-for="LocationCsSpoc" class="form-control form-control-sm" />
+                    <span asp-validation-for="LocationCsSpoc" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="SalesSpoc">Sales SPOC <span class="text-red">*</span></label>
+                    <input asp-for="SalesSpoc" class="form-control form-control-sm" />
+                    <span asp-validation-for="SalesSpoc" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
                     <label asp-for="Vertical">Vertical <span class="text-red">*</span></label>
                     <select asp-for="Vertical" class="form-select form-select-sm">
                         <option value="">-- Select Vertical --</option>
@@ -49,200 +134,103 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="SalesSpoc">Sales SPOC <span class="text-red">*</span></label>
-                    <input asp-for="SalesSpoc" class="form-control form-control-sm" />
-                    <span asp-validation-for="SalesSpoc" class="text-danger"></span>
+                    <label asp-for="VerticalHead">Vertical Head</label>
+                    <input asp-for="VerticalHead" class="form-control form-control-sm" />
+                    <span asp-validation-for="VerticalHead" class="text-danger"></span>
                 </div>
             </div>
         </div>
 
+        <!-- Row 4: Account owner, Horizontal, Horizontal head, Clients Country of origin -->
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="AccountName">Account Name <span class="text-red">*</span></label>
-                    <input asp-for="AccountName" class="form-control form-control-sm" />
-                    <span asp-validation-for="AccountName" class="text-danger"></span>
+                    <label asp-for="AccountOwner">Account owner</label>
+                    <input asp-for="AccountOwner" class="form-control form-control-sm" />
+                    <span asp-validation-for="AccountOwner" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="DebitingProjectId">Debiting Project ID</label>
+                    <label asp-for="Horizontal">Horizontal</label>
+                    <select asp-for="Horizontal" class="form-select form-select-sm">
+                        <option value="">-- Select Horizontal --</option>
+                        @foreach (var item in ViewBag.HorizontalList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Horizontal" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="HorizontalHead">Horizontal head</label>
+                    <input asp-for="HorizontalHead" class="form-control form-control-sm" />
+                    <span asp-validation-for="HorizontalHead" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="ClientsCountryOfOrigin">Clients Country of origin</label>
+                    <select asp-for="ClientsCountryOfOrigin" class="form-select form-select-sm">
+                        <option value="">-- Select Country --</option>
+                        @foreach (var item in ViewBag.CountryList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ClientsCountryOfOrigin" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 5: Debiting Project ID, TCV MN USD, Name and No. Attendees, Duration of Visit -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="DebitingProjectId">Debiting Project ID <span class="text-red">*</span></label>
                     <input asp-for="DebitingProjectId" class="form-control form-control-sm" />
                     <span asp-validation-for="DebitingProjectId" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="OpportunityType">Opportunity Type <span class="text-red">*</span></label>
-                    <select asp-for="OpportunityType" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.OpportunityType>()"></select>
-                    <span asp-validation-for="OpportunityType" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="ServiceScope">Service Scope</label>
-                    <input asp-for="ServiceScope" class="form-control form-control-sm" />
-                    <span asp-validation-for="ServiceScope" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="SalesStage">Sales Stage</label>
-                    <select asp-for="SalesStage" class="form-select form-select-sm">
-                        <option value="">-- Select Stage --</option>
-                        @foreach (var item in ViewBag.SalesStageList as List<string>)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>
-                    <span asp-validation-for="SalesStage" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="TcvMnUsd">TCV (Mn USD)</label>
+                    <label asp-for="TcvMnUsd">TCV MN USD <span class="text-red">*</span></label>
                     <input asp-for="TcvMnUsd" class="form-control form-control-sm" type="number" step="0.01" />
                     <span asp-validation-for="TcvMnUsd" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="VisitStatus">Visit Status <span class="text-red">*</span></label>
-                    <select asp-for="VisitStatus" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.VisitStatus>()"></select>
-                    <span asp-validation-for="VisitStatus" class="text-danger"></span>
+                    <label asp-for="NameAndNoOfAttendees">Name and No. Attendees - clients end</label>
+                    <input asp-for="NameAndNoOfAttendees" class="form-control form-control-sm" placeholder="e.g., John Doe, Jane Smith (5 attendees)" />
+                    <span asp-validation-for="NameAndNoOfAttendees" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="VisitType">Visit Type</label>
-                    <select asp-for="VisitType" class="form-select form-select-sm">
-                        <option value="">-- Select Type --</option>
-                        @foreach (var item in ViewBag.VisitTypeList as List<string>)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>
-                    <span asp-validation-for="VisitType" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="VisitDate">Visit Date <span class="text-red">*</span></label>
-                    <input asp-for="VisitDate" class="form-control form-control-sm" type="date" />
-                    <span asp-validation-for="VisitDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="IntimationDate">Intimation Date</label>
-                    <input asp-for="IntimationDate" class="form-control form-control-sm" type="date" />
-                    <span asp-validation-for="IntimationDate" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="Location">Location</label>
-                    <select asp-for="Location" class="form-select form-select-sm">
-                        <option value="">-- Select Location --</option>
-                        @foreach (var item in ViewBag.LocationList as List<string>)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Location" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="Site">Site</label>
-                    <select asp-for="Site" class="form-select form-select-sm">
-                        <option value="">-- Select Site --</option>
-                        @foreach (var item in ViewBag.SiteList as List<string>)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Site" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="VisitorsName">Visitors Name</label>
-                    <input asp-for="VisitorsName" class="form-control form-control-sm" />
-                    <span asp-validation-for="VisitorsName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="NumberOfAttendees">Number Of Attendees</label>
-                    <input asp-for="NumberOfAttendees" class="form-control form-control-sm" type="number" />
-                    <span asp-validation-for="NumberOfAttendees" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="LevelOfVisitors">Level Of Visitors</label>
-                    <select asp-for="LevelOfVisitors" class="form-select form-select-sm">
-                        <option value="">-- Select Level --</option>
-                        @foreach (var item in ViewBag.LevelOfVisitorsList as List<string>)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>
-                    <span asp-validation-for="LevelOfVisitors" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="VisitDuration">Visit Duration</label>
-                    <input asp-for="VisitDuration" class="form-control form-control-sm" />
+                    <label asp-for="VisitDuration">Duration of Visit (Days/Hours)</label>
+                    <input asp-for="VisitDuration" class="form-control form-control-sm" placeholder="e.g., 2 Days or 4 Hours" />
                     <span asp-validation-for="VisitDuration" class="text-danger"></span>
                 </div>
             </div>
         </div>
 
+        <!-- Row 6: Additional Information, Repository -->
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label asp-for="VisitLead">Visit Lead</label>
-                    <select asp-for="VisitLead" class="form-select form-select-sm">
-                        <option value="">-- Select Lead --</option>
-                        @foreach (var item in ViewBag.VisitLeadList as List<string>)
-                        {
-                            <option value="@item">@item</option>
-                        }
-                    </select>
-                    <span asp-validation-for="VisitLead" class="text-danger"></span>
+                    <label asp-for="AdditionalInformation">Additional Information</label>
+                    <textarea asp-for="AdditionalInformation" class="form-control form-control-sm border-full" rows="3"></textarea>
+                    <span asp-validation-for="AdditionalInformation" class="text-danger"></span>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label asp-for="OpportunityDetails">Opportunity Details</label>
-                    <textarea asp-for="OpportunityDetails" class="form-control form-control-sm border-full" rows="2"></textarea>
-                    <span asp-validation-for="OpportunityDetails" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="KeyMessages">Key Messages</label>
-                    <textarea asp-for="KeyMessages" class="form-control form-control-sm border-full" rows="2"></textarea>
-                    <span asp-validation-for="KeyMessages" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="Remarks">Remarks</label>
-                    <textarea asp-for="Remarks" class="form-control form-control-sm border-full" rows="2"></textarea>
-                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                    <label asp-for="Repository">Repository</label>
+                    <textarea asp-for="Repository" class="form-control form-control-sm border-full" rows="3" placeholder="SharePoint link or document repository"></textarea>
+                    <span asp-validation-for="Repository" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -250,7 +238,7 @@
         <div class="clear-20"></div>
         <div class="col-md-12">
             <button type="submit" class="btn btn-sm btn-danger btn-m-r">
-                Update
+                Create
             </button>
             <a asp-action="Index" class="btn btn-sm btn-br btn-m-r">Cancel</a>
         </div>
