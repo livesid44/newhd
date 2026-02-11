@@ -88,6 +88,7 @@ namespace VisitManagement.Controllers
         // GET: Visits/Create
         public IActionResult Create()
         {
+            PopulateDropdownData();
             return View();
         }
 
@@ -131,6 +132,7 @@ namespace VisitManagement.Controllers
                 return Forbid();
             }
 
+            PopulateDropdownData();
             return View(visit);
         }
 
@@ -226,6 +228,95 @@ namespace VisitManagement.Controllers
         private bool VisitExists(int id)
         {
             return _context.Visits.Any(e => e.Id == id);
+        }
+
+        private void PopulateDropdownData()
+        {
+            ViewBag.TypeOfVisitList = new List<string>
+            {
+                "Prospect Visit",
+                "Operations Visit",
+                "RnR",
+                "Ramp",
+                "Trainings",
+                "Others"
+            };
+
+            ViewBag.VerticalList = new List<string>
+            {
+                "Technology",
+                "Finance",
+                "Healthcare",
+                "Manufacturing",
+                "Retail",
+                "Telecom",
+                "Others"
+            };
+
+            ViewBag.SalesStageList = new List<string>
+            {
+                "Prospect",
+                "Qualification",
+                "Proposal",
+                "Negotiation",
+                "Closed Won",
+                "Closed Lost"
+            };
+
+            ViewBag.VisitTypeList = new List<string>
+            {
+                "On-site",
+                "Virtual",
+                "Hybrid"
+            };
+
+            ViewBag.LocationList = new List<string>
+            {
+                "Pune",
+                "Mumbai",
+                "Bangalore",
+                "Hyderabad",
+                "Chennai",
+                "Delhi NCR",
+                "Kolkata",
+                "New York",
+                "London",
+                "Singapore",
+                "Dubai",
+                "Others"
+            };
+
+            ViewBag.SiteList = new List<string>
+            {
+                "Hinjewadi",
+                "Magarpatta",
+                "Whitefield",
+                "HITEC City",
+                "OMR",
+                "Gurgaon",
+                "Noida",
+                "Others"
+            };
+
+            ViewBag.LevelOfVisitorsList = new List<string>
+            {
+                "C-Level/CXO",
+                "VP Level",
+                "Director Level",
+                "Manager Level",
+                "Team Lead",
+                "Individual Contributor",
+                "Others"
+            };
+
+            ViewBag.VisitLeadList = new List<string>
+            {
+                "Capability",
+                "Sales",
+                "Marketing",
+                "Delivery",
+                "Others"
+            };
         }
 
         private VisitCategory DetermineVisitCategory(Visit visit)

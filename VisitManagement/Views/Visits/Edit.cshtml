@@ -24,14 +24,26 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="TypeOfVisit">Type Of Visit <span class="text-red">*</span></label>
-                    <input asp-for="TypeOfVisit" class="form-control form-control-sm" />
+                    <select asp-for="TypeOfVisit" class="form-select form-select-sm">
+                        <option value="">-- Select Type --</option>
+                        @foreach (var item in ViewBag.TypeOfVisitList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="TypeOfVisit" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="Vertical">Vertical <span class="text-red">*</span></label>
-                    <input asp-for="Vertical" class="form-control form-control-sm" />
+                    <select asp-for="Vertical" class="form-select form-select-sm">
+                        <option value="">-- Select Vertical --</option>
+                        @foreach (var item in ViewBag.VerticalList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="Vertical" class="text-danger"></span>
                 </div>
             </div>
@@ -79,7 +91,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="SalesStage">Sales Stage</label>
-                    <input asp-for="SalesStage" class="form-control form-control-sm" />
+                    <select asp-for="SalesStage" class="form-select form-select-sm">
+                        <option value="">-- Select Stage --</option>
+                        @foreach (var item in ViewBag.SalesStageList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="SalesStage" class="text-danger"></span>
                 </div>
             </div>
@@ -100,7 +118,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="VisitType">Visit Type</label>
-                    <input asp-for="VisitType" class="form-control form-control-sm" />
+                    <select asp-for="VisitType" class="form-select form-select-sm">
+                        <option value="">-- Select Type --</option>
+                        @foreach (var item in ViewBag.VisitTypeList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="VisitType" class="text-danger"></span>
                 </div>
             </div>
@@ -124,14 +148,26 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="Location">Location</label>
-                    <input asp-for="Location" class="form-control form-control-sm" />
+                    <select asp-for="Location" class="form-select form-select-sm">
+                        <option value="">-- Select Location --</option>
+                        @foreach (var item in ViewBag.LocationList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="Location" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="Site">Site</label>
-                    <input asp-for="Site" class="form-control form-control-sm" />
+                    <select asp-for="Site" class="form-select form-select-sm">
+                        <option value="">-- Select Site --</option>
+                        @foreach (var item in ViewBag.SiteList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="Site" class="text-danger"></span>
                 </div>
             </div>
@@ -155,7 +191,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="LevelOfVisitors">Level Of Visitors</label>
-                    <input asp-for="LevelOfVisitors" class="form-control form-control-sm" />
+                    <select asp-for="LevelOfVisitors" class="form-select form-select-sm">
+                        <option value="">-- Select Level --</option>
+                        @foreach (var item in ViewBag.LevelOfVisitorsList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="LevelOfVisitors" class="text-danger"></span>
                 </div>
             </div>
@@ -172,7 +214,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="VisitLead">Visit Lead</label>
-                    <input asp-for="VisitLead" class="form-control form-control-sm" />
+                    <select asp-for="VisitLead" class="form-select form-select-sm">
+                        <option value="">-- Select Lead --</option>
+                        @foreach (var item in ViewBag.VisitLeadList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="VisitLead" class="text-danger"></span>
                 </div>
             </div>
