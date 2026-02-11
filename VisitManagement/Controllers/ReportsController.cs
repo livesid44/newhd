@@ -52,12 +52,12 @@ namespace VisitManagement.Controllers
             var csv = new StringBuilder();
             
             // Add header row
-            csv.AppendLine("S.NO,Type Of Visit,Vertical,Sales SPOC,Account Name,Debiting Project ID,Opportunity Details,Opportunity Type,Service Scope,Sales Stage,TCV MN USD,Visit Status,Visit Type,Visit Date,Date of Intimation,Location,Site,Visitors Name,No. Attendees,Level of Visitors,Duration of Visit,Remarks,Visit Lead,Key Messages,Created By");
+            csv.AppendLine("Visit Date,Type Of Visit,Opportunity Type,Sales Stage,Client Name,Visit Category,Geo,Location,Location CS SPOC,Sales SPOC,Vertical,Vertical Head,Account Owner,Horizontal,Horizontal Head,Clients Country of Origin,Debiting Project ID,TCV MN USD,Name and No. Attendees - Clients End,Duration of Visit,Additional Information,Repository");
 
             // Add data rows
             foreach (var visit in visits)
             {
-                csv.AppendLine($"{visit.SerialNumber},{EscapeCsv(visit.TypeOfVisit)},{EscapeCsv(visit.Vertical)},{EscapeCsv(visit.SalesSpoc)},{EscapeCsv(visit.AccountName)},{EscapeCsv(visit.DebitingProjectId)},{EscapeCsv(visit.OpportunityDetails)},{EscapeCsv(visit.OpportunityType.ToString())},{EscapeCsv(visit.ServiceScope)},{EscapeCsv(visit.SalesStage)},{visit.TcvMnUsd},{EscapeCsv(visit.VisitStatus.ToString())},{EscapeCsv(visit.VisitType)},{visit.VisitDate:dd/MM/yyyy},{visit.IntimationDate:dd/MM/yyyy},{EscapeCsv(visit.Location)},{EscapeCsv(visit.Site)},{EscapeCsv(visit.VisitorsName)},{visit.NumberOfAttendees},{EscapeCsv(visit.LevelOfVisitors)},{EscapeCsv(visit.VisitDuration)},{EscapeCsv(visit.Remarks)},{EscapeCsv(visit.VisitLead)},{EscapeCsv(visit.KeyMessages)},{EscapeCsv(visit.CreatedBy)}");
+                csv.AppendLine($"{visit.VisitDate:dd/MM/yyyy},{EscapeCsv(visit.TypeOfVisit)},{EscapeCsv(visit.OpportunityType.ToString())},{EscapeCsv(visit.SalesStage)},{EscapeCsv(visit.AccountName)},{EscapeCsv(visit.Category?.ToString())},{EscapeCsv(visit.Geo)},{EscapeCsv(visit.Location)},{EscapeCsv(visit.LocationCsSpoc)},{EscapeCsv(visit.SalesSpoc)},{EscapeCsv(visit.Vertical)},{EscapeCsv(visit.VerticalHead)},{EscapeCsv(visit.AccountOwner)},{EscapeCsv(visit.Horizontal)},{EscapeCsv(visit.HorizontalHead)},{EscapeCsv(visit.ClientsCountryOfOrigin)},{EscapeCsv(visit.DebitingProjectId)},{visit.TcvMnUsd},{EscapeCsv(visit.VisitorsName)},{EscapeCsv(visit.VisitDuration)},{EscapeCsv(visit.AdditionalInformation)},{EscapeCsv(visit.Repository)}");
             }
 
             var bytes = Encoding.UTF8.GetBytes(csv.ToString());

@@ -29,7 +29,6 @@ namespace VisitManagement.Tests
             var visit = new Visit
             {
                 Id = 1,
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",
@@ -75,7 +74,6 @@ namespace VisitManagement.Tests
 
             var visit = new Visit
             {
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",
@@ -133,7 +131,6 @@ namespace VisitManagement.Tests
             var visit = new Visit
             {
                 Id = 1,
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",
@@ -180,7 +177,6 @@ namespace VisitManagement.Tests
             var visit = new Visit
             {
                 Id = 1,
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",

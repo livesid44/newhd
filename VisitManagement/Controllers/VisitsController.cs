@@ -95,20 +95,24 @@ namespace VisitManagement.Controllers
         // POST: Visits/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages")] Visit visit)
+        public async Task<IActionResult> Create([Bind("VisitDate,TypeOfVisit,OpportunityType,SalesStage,AccountName,Category,Geo,Location,LocationCsSpoc,SalesSpoc,Vertical,VerticalHead,AccountOwner,Horizontal,HorizontalHead,ClientsCountryOfOrigin,DebitingProjectId,TcvMnUsd,VisitorsName,VisitDuration,AdditionalInformation,Repository,VisitStatus,VisitType,IntimationDate,Site,NumberOfAttendees,LevelOfVisitors,Remarks,VisitLead,KeyMessages,OpportunityDetails,ServiceScope")] Visit visit)
         {
             if (ModelState.IsValid)
             {
                 visit.CreatedDate = DateTime.Now;
                 visit.CreatedBy = User.Identity?.Name ?? "Unknown";
                 
-                // Automatically determine visit category
-                visit.Category = DetermineVisitCategory(visit);
+                // Automatically determine visit category if not set
+                if (!visit.Category.HasValue)
+                {
+                    visit.Category = DetermineVisitCategory(visit);
+                }
                 
                 _context.Add(visit);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            PopulateDropdownData();
             return View(visit);
         }
 
@@ -139,7 +143,7 @@ namespace VisitManagement.Controllers
         // POST: Visits/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages,CreatedDate,CreatedBy")] Visit visit)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VisitDate,TypeOfVisit,OpportunityType,SalesStage,AccountName,Category,Geo,Location,LocationCsSpoc,SalesSpoc,Vertical,VerticalHead,AccountOwner,Horizontal,HorizontalHead,ClientsCountryOfOrigin,DebitingProjectId,TcvMnUsd,VisitorsName,VisitDuration,AdditionalInformation,Repository,VisitStatus,VisitType,IntimationDate,Site,NumberOfAttendees,LevelOfVisitors,Remarks,VisitLead,KeyMessages,OpportunityDetails,ServiceScope,CreatedDate,CreatedBy")] Visit visit)
         {
             if (id != visit.Id)
             {
@@ -158,8 +162,11 @@ namespace VisitManagement.Controllers
                 {
                     visit.ModifiedDate = DateTime.Now;
                     
-                    // Re-evaluate category if TCV or visitor level changed
-                    visit.Category = DetermineVisitCategory(visit);
+                    // Re-evaluate category if not set and TCV or visitor level exists
+                    if (!visit.Category.HasValue)
+                    {
+                        visit.Category = DetermineVisitCategory(visit);
+                    }
                     
                     _context.Update(visit);
                     await _context.SaveChangesAsync();
@@ -177,6 +184,7 @@ namespace VisitManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            PopulateDropdownData();
             return View(visit);
         }
 

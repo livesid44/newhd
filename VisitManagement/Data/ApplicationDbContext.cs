@@ -67,7 +67,6 @@ namespace VisitManagement.Data
                 new Visit
                 {
                     Id = 1,
-                    SerialNumber = 1,
                     TypeOfVisit = "Client Meeting",
                     Vertical = "Technology",
                     SalesSpoc = "John Doe",
@@ -97,7 +96,6 @@ namespace VisitManagement.Data
                 new Visit
                 {
                     Id = 2,
-                    SerialNumber = 2,
                     TypeOfVisit = "Technical Demo",
                     Vertical = "Finance",
                     SalesSpoc = "Jane Smith",

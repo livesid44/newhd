@@ -12,13 +12,14 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="CreatedDate" />
+        <input type="hidden" asp-for="CreatedBy" />
         
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label asp-for="SerialNumber">Serial Number <span class="text-red">*</span></label>
-                    <input asp-for="SerialNumber" class="form-control form-control-sm" />
-                    <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                    <label asp-for="VisitDate">Visit Date <span class="text-red">*</span></label>
+                    <input asp-for="VisitDate" class="form-control form-control-sm" type="date" />
+                    <span asp-validation-for="VisitDate" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
