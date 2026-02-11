@@ -40,7 +40,7 @@ namespace VisitManagement.Models
 
         [Required]
         [Display(Name = "Status")]
-        public TaskStatus Status { get; set; }
+        public TaskAssignmentStatus Status { get; set; }
 
         [Display(Name = "Description")]
         [MaxLength(1000)]
@@ -72,7 +72,7 @@ namespace VisitManagement.Models
         Critical
     }
 
-    public enum TaskStatus
+    public enum TaskAssignmentStatus
     {
         NotStarted,
         InProgress,

@@ -1,0 +1,130 @@
+@model IEnumerable<VisitManagement.Models.Checklist>
+
+@{
+    ViewData["Title"] = "Visit Checklist";
+    var visit = ViewBag.Visit as VisitManagement.Models.Visit;
+}
+
+<div class="white-bg-main">
+    <div class="row mb-3">
+        <div class="col-md-9">
+            <h5 class="mb-0">
+                <i class="bi bi-check2-square"></i> Visit Checklist - @visit?.AccountName
+            </h5>
+            @if (visit?.Category != null)
+            {
+                <p class="text-muted mb-0">
+                    <strong>Category:</strong> 
+                    @switch (visit.Category)
+                    {
+                        case VisitManagement.Models.VisitCategory.Platinum:
+                            <span class="badge bg-warning text-dark"><i class="bi bi-star-fill"></i> Platinum</span>
+                            break;
+                        case VisitManagement.Models.VisitCategory.Gold:
+                            <span class="badge bg-primary"><i class="bi bi-star-fill"></i> Gold</span>
+                            break;
+                        case VisitManagement.Models.VisitCategory.Silver:
+                            <span class="badge bg-secondary"><i class="bi bi-star"></i> Silver</span>
+                            break;
+                    }
+                    | <strong>Visit Date:</strong> @visit.VisitDate.ToString("dd/MM/yyyy")
+                </p>
+            }
+        </div>
+        <div class="col-md-3">
+            <a asp-controller="Visits" asp-action="Details" asp-route-id="@visit?.Id" class="btn btn-secondary float-end">
+                <i class="bi bi-arrow-left"></i> Back to Visit
+            </a>
+        </div>
+    </div>
+
+    <div class="clear-20" style="height: 20px; clear: both;"></div>
+
+    @if (Model.Any())
+    {
+        var groupedChecklists = Model.GroupBy(c => c.ChecklistType).OrderBy(g => g.Key);
+        
+        @foreach (var group in groupedChecklists)
+        {
+            var completedCount = group.Count(c => c.IsCompleted);
+            var totalCount = group.Count();
+            var percentage = totalCount > 0 ? (int)((completedCount * 100.0) / totalCount) : 0;
+
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="mb-0">
+                                <i class="bi bi-list-check"></i> @group.Key
+                                <span class="badge bg-primary ms-2">@completedCount / @totalCount Completed</span>
+                            </h6>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="progress" style="height: 25px;">
+                                <div class="progress-bar @(percentage == 100 ? "bg-success" : "bg-primary")" 
+                                     role="progressbar" 
+                                     style="width: @percentage%;" 
+                                     aria-valuenow="@percentage" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    @percentage%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm table-hover mb-0">
+                        <tbody>
+                            @foreach (var item in group.OrderBy(c => c.DisplayOrder))
+                            {
+                                <tr class="@(item.IsCompleted ? "table-success" : "")">
+                                    <td style="width: 50px;" class="text-center">
+                                        <form asp-action="ToggleComplete" method="post" style="display: inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="visitId" value="@visit?.Id" />
+                                            <button type="submit" class="btn btn-sm @(item.IsCompleted ? "btn-success" : "btn-outline-secondary")" title="@(item.IsCompleted ? "Mark as incomplete" : "Mark as complete")">
+                                                <i class="bi @(item.IsCompleted ? "bi-check-circle-fill" : "bi-circle")"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <strong>@item.ItemName</strong>
+                                        @if (!string.IsNullOrEmpty(item.Description))
+                                        {
+                                            <br /><small class="text-muted">@item.Description</small>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.Remarks))
+                                        {
+                                            <br /><small class="text-info"><i class="bi bi-sticky"></i> @item.Remarks</small>
+                                        }
+                                    </td>
+                                    <td style="width: 200px;">
+                                        @if (item.IsCompleted)
+                                        {
+                                            <small class="text-muted">
+                                                <i class="bi bi-person"></i> @item.CompletedBy<br />
+                                                <i class="bi bi-calendar"></i> @item.CompletedDate?.ToString("dd/MM/yyyy HH:mm")
+                                            </small>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No checklist items found for this visit. 
+            @if (visit?.Category == null)
+            {
+                <span>Please assign a category to the visit to generate checklists.</span>
+            }
+        </div>
+    }
+</div>

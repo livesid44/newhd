@@ -1,0 +1,106 @@
+@model IEnumerable<VisitManagement.Models.Stakeholder>
+
+@{
+    ViewData["Title"] = "Stakeholder Directory";
+}
+
+<div class="white-bg-main">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h5 class="mb-0"><i class="bi bi-people-fill"></i> Stakeholder Directory</h5>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-3">
+                <a asp-action="Create" class="btn btn-primary float-end">
+                    <i class="bi bi-plus-circle"></i> Add New Stakeholder
+                </a>
+            </div>
+        }
+        <div class="col-md-3">
+            <form asp-action="Index" method="get">
+                <div class="input-group">
+                    <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control form-control-sm" placeholder="Search...">
+                    <span><i class="bi bi-search icon-search"></i></span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Filter by Team -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <form asp-action="Index" method="get" class="d-inline">
+                <input type="hidden" name="searchString" value="@ViewData["CurrentFilter"]" />
+                <div class="btn-group" role="group">
+                    <button type="submit" name="filterTeam" value="" class="btn btn-sm @(string.IsNullOrEmpty(ViewData["CurrentFilterTeam"]?.ToString()) ? "btn-primary" : "btn-outline-primary")">All Teams</button>
+                    <button type="submit" name="filterTeam" value="Client Experience" class="btn btn-sm @(ViewData["CurrentFilterTeam"]?.ToString() == "Client Experience" ? "btn-primary" : "btn-outline-primary")">Client Experience</button>
+                    <button type="submit" name="filterTeam" value="Marketing" class="btn btn-sm @(ViewData["CurrentFilterTeam"]?.ToString() == "Marketing" ? "btn-primary" : "btn-outline-primary")">Marketing</button>
+                    <button type="submit" name="filterTeam" value="Creative Hub" class="btn btn-sm @(ViewData["CurrentFilterTeam"]?.ToString() == "Creative Hub" ? "btn-primary" : "btn-outline-primary")">Creative Hub</button>
+                    <button type="submit" name="filterTeam" value="Customer Success" class="btn btn-sm @(ViewData["CurrentFilterTeam"]?.ToString() == "Customer Success" ? "btn-primary" : "btn-outline-primary")">Customer Success</button>
+                    <button type="submit" name="filterTeam" value="TIM" class="btn btn-sm @(ViewData["CurrentFilterTeam"]?.ToString() == "TIM" ? "btn-primary" : "btn-outline-primary")">TIM</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="clear-20" style="height: 20px; clear: both;"></div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Team</th>
+                    <th>Role</th>
+                    <th>Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                        <td>
+                            <a href="mailto:@item.Email">
+                                <i class="bi bi-envelope"></i> @item.Email
+                            </a>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.PhoneNumber))
+                            {
+                                <i class="bi bi-telephone"></i> @item.PhoneNumber
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="badge bg-info">@item.Team</span>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Role)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="Details">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

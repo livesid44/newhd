@@ -31,7 +31,7 @@ namespace VisitManagement.Controllers
 
             if (!string.IsNullOrEmpty(filterStatus))
             {
-                if (Enum.TryParse<TaskStatus>(filterStatus, out var status))
+                if (Enum.TryParse<TaskAssignmentStatus>(filterStatus, out var status))
                 {
                     tasks = tasks.Where(t => t.Status == status);
                 }
@@ -129,7 +129,7 @@ namespace VisitManagement.Controllers
                 try
                 {
                     task.ModifiedDate = DateTime.Now;
-                    if (task.Status == TaskStatus.Completed && !task.CompletedDate.HasValue)
+                    if (task.Status == TaskAssignmentStatus.Completed && !task.CompletedDate.HasValue)
                     {
                         task.CompletedDate = DateTime.Now;
                     }
