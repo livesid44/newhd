@@ -108,12 +108,10 @@ namespace VisitManagement.Services
                 .Replace("{AccountName}", visit.AccountName ?? "")
                 .Replace("{VisitDate}", visit.VisitDate.ToString("dd/MM/yyyy"))
                 .Replace("{Location}", visit.Location ?? "")
-                .Replace("{VisitStatus}", visit.VisitStatus.ToString())
+                .Replace("{Category}", visit.Category?.ToString() ?? "Not assigned")
                 .Replace("{SalesSpoc}", visit.SalesSpoc ?? "")
                 .Replace("{OpportunityType}", visit.OpportunityType.ToString())
-                .Replace("{VisitType}", visit.VisitType ?? "")
-                .Replace("{VisitorsName}", visit.VisitorsName ?? "")
-                .Replace("{IntimationDate}", visit.IntimationDate.ToString("dd/MM/yyyy"));
+                .Replace("{NameAndAttendees}", visit.NameAndNoOfAttendees ?? "");
         }
     }
 }
