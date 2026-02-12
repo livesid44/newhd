@@ -42,7 +42,8 @@ A comprehensive ASP.NET Core MVC application for managing client visits and user
 ## Prerequisites
 
 - .NET 8.0 SDK or later
-- SQL Server LocalDB (or SQL Server instance)
+- **For Development**: No database installation required (uses SQLite)
+- **For Production**: SQL Server 2016+ or Azure SQL Database (optional)
 - Visual Studio 2022 / Visual Studio Code / Rider (optional)
 
 ## Getting Started
@@ -62,28 +63,38 @@ dotnet build
 
 ### 3. Configure Database Connection
 
-The application uses SQL Server LocalDB by default. The connection string in `VisitManagement/appsettings.json` is already configured:
+**The application uses SQLite by default** - a lightweight, file-based database that requires no installation.
 
+**Database Location**: `VisitManagement/visitmanagement.db` (created automatically on first run)
+
+**Want to use SQL Server instead?** See detailed instructions in [DATABASE_SETUP.md](DATABASE_SETUP.md) for:
+- SQLite vs SQL Server comparison
+- SQL Server connection string examples
+- Azure SQL Database configuration
+- Security best practices
+
+Quick SQL Server setup:
 ```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=(localdb)\\MSSQLLocalDB;Database=VisitManagementDB;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Command Timeout=0"
-  }
-}
+// In appsettings.json, replace the SQLite connection with:
+"DefaultConnection": "Server=YOUR_SERVER;Database=VisitManagement;Integrated Security=True;TrustServerCertificate=True"
 ```
 
-If you want to use a different SQL Server instance, update this connection string accordingly.
+The application auto-detects the database type:
+- Connection string with `.db` → SQLite
+- Otherwise → SQL Server
 
-### 4. Create Database and Run Migrations
+### 4. Create Database and Apply Schema
 
-The migrations are already created. Simply apply them to create the database:
+The database is created automatically when you run the application for the first time. No manual steps required!
+
+**Optional**: If you want to use Entity Framework migrations explicitly:
 
 ```bash
 cd VisitManagement
 dotnet ef database update
 ```
 
-This will create the database with all tables and seed data (2 sample visits and 3 sample users).
+This will create the database with all tables and seed data.
 
 ### 5. Run the Application
 
@@ -217,9 +228,11 @@ Manages user information:
 
 - **ASP.NET Core 8.0 MVC**: Web framework
 - **Entity Framework Core 8.0**: ORM for database operations
-- **SQL Server**: Database engine
+- **SQLite**: Lightweight file-based database (development default)
+- **SQL Server**: Enterprise database (production option)
 - **Bootstrap 5**: Responsive UI framework
 - **Bootstrap Icons**: Icon library
+- **Chart.js**: Interactive charts and visualizations
 - **xUnit**: Unit testing framework
 - **Moq**: Mocking library for tests
 
@@ -251,6 +264,17 @@ Potential improvements for future versions:
 - Mobile app
 
 ## Troubleshooting
+
+### Database Configuration
+
+**Question: Where is the data stored?**
+
+By default, the application uses **SQLite** - a file-based database stored at:
+- **Location**: `VisitManagement/visitmanagement.db`
+- **No installation required**: SQLite is embedded in the application
+- **Portable**: Copy the .db file to move your data
+
+For production deployments, you can switch to **SQL Server**. See [DATABASE_SETUP.md](DATABASE_SETUP.md) for complete instructions.
 
 ### Database Errors
 
@@ -284,16 +308,23 @@ The warning about `TcvMnUsd` decimal precision has been resolved in the latest v
 
 ### Connection String Issues
 
-The application uses SQL Server LocalDB with the following connection string:
-```
-Data Source=(localdb)\MSSQLLocalDB;Database=VisitManagementDB;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Command Timeout=0
+**Current Configuration (SQLite)**:
+```json
+"DefaultConnection": "Data Source=visitmanagement.db"
 ```
 
-If you encounter connection issues:
-- Ensure SQL Server LocalDB is installed
-- Verify the instance name matches `(localdb)\MSSQLLocalDB`
-- Check that Windows Authentication is enabled
-- Try running the application as Administrator
+The application automatically detects the database type:
+- If connection string contains `.db` → Uses SQLite
+- Otherwise → Uses SQL Server
+
+**Switching to SQL Server**:
+1. Update `appsettings.json` with SQL Server connection string:
+```json
+"DefaultConnection": "Server=YOUR_SERVER;Database=VisitManagement;Integrated Security=True;TrustServerCertificate=True"
+```
+2. Run the application - database is created automatically
+
+For detailed SQL Server configuration options, see [DATABASE_SETUP.md](DATABASE_SETUP.md).
 
 ## Contributing
 
