@@ -42,9 +42,15 @@ A comprehensive ASP.NET Core MVC application for managing client visits and user
 ## Prerequisites
 
 - .NET 8.0 SDK or later
-- **For Development**: No database installation required (uses SQLite)
-- **For Production**: SQL Server 2016+ or Azure SQL Database (optional)
+- **SQL Server** (choose one):
+  - SQL Server 2016+ (any edition)
+  - SQL Server Express (free) - recommended for development
+  - LocalDB (included with Visual Studio)
+  - Azure SQL Database
 - Visual Studio 2022 / Visual Studio Code / Rider (optional)
+- SQL Server Management Studio (SSMS) - recommended for database management
+
+**Note:** The application supports both SQL Server (with SQL Authentication or Windows Authentication) and SQLite. See [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md) for configuration details.
 
 ## Getting Started
 
@@ -63,21 +69,32 @@ dotnet build
 
 ### 3. Configure Database Connection
 
-**The application uses SQLite by default** - a lightweight, file-based database that requires no installation.
+**The application is configured to use SQL Server with SQL Authentication by default.**
 
-**Database Location**: `VisitManagement/visitmanagement.db` (created automatically on first run)
+**IMPORTANT:** Update the connection string in `appsettings.json` or `appsettings.Development.json` with your SQL Server credentials:
 
-**Want to use SQL Server instead?** See detailed instructions in [DATABASE_SETUP.md](DATABASE_SETUP.md) for:
-- SQLite vs SQL Server comparison
-- SQL Server connection string examples
-- Azure SQL Database configuration
-- Security best practices
-
-Quick SQL Server setup:
 ```json
-// In appsettings.json, replace the SQLite connection with:
-"DefaultConnection": "Server=YOUR_SERVER;Database=VisitManagement;Integrated Security=True;TrustServerCertificate=True"
+"DefaultConnection": "Server=localhost;Database=VisitManagement;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true"
 ```
+
+**Common Connection String Formats:**
+
+- **SQL Server Express**: `Server=localhost\\SQLEXPRESS;Database=VisitManagement;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true`
+- **Default Instance**: `Server=localhost;Database=VisitManagement;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true`
+- **Windows Auth** (no password): `Server=localhost;Database=VisitManagement;Integrated Security=True;TrustServerCertificate=True`
+
+**📘 Need help setting up SQL Server?**
+- **See [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md)** for complete step-by-step instructions including:
+  - Creating SQL Server users
+  - Granting permissions
+  - Connection string examples
+  - Troubleshooting guide
+
+**Alternative: Use SQLite** (no SQL Server needed):
+```json
+"DefaultConnection": "Data Source=visitmanagement.db"
+```
+See [DATABASE_SETUP.md](DATABASE_SETUP.md) for more database options.
 
 The application auto-detects the database type:
 - Connection string with `.db` → SQLite
@@ -228,11 +245,12 @@ Manages user information:
 
 - **ASP.NET Core 8.0 MVC**: Web framework
 - **Entity Framework Core 8.0**: ORM for database operations
-- **SQLite**: Lightweight file-based database (development default)
-- **SQL Server**: Enterprise database (production option)
+- **SQL Server**: Primary database (supports 2016+, Express, LocalDB, Azure SQL)
+- **SQLite**: Alternative lightweight database option
+- **ASP.NET Core Identity**: Authentication and user management
 - **Bootstrap 5**: Responsive UI framework
 - **Bootstrap Icons**: Icon library
-- **Chart.js**: Interactive charts and visualizations
+- **Chart.js 4.4.0**: Interactive charts and visualizations
 - **xUnit**: Unit testing framework
 - **Moq**: Mocking library for tests
 
@@ -269,33 +287,63 @@ Potential improvements for future versions:
 
 **Question: Where is the data stored?**
 
-By default, the application uses **SQLite** - a file-based database stored at:
-- **Location**: `VisitManagement/visitmanagement.db`
-- **No installation required**: SQLite is embedded in the application
-- **Portable**: Copy the .db file to move your data
+The application is configured to use **SQL Server with SQL Authentication** by default.
 
-For production deployments, you can switch to **SQL Server**. See [DATABASE_SETUP.md](DATABASE_SETUP.md) for complete instructions.
+- **Database Server**: Your local SQL Server instance (localhost, localhost\SQLEXPRESS, or (localdb)\MSSQLLocalDB)
+- **Database Name**: `VisitManagement`
+- **Authentication**: SQL Server Authentication (username and password)
+- **Created automatically**: Database and tables are created when you first run the application
+
+**Connection String Location**: 
+- Development: `VisitManagement/appsettings.Development.json`
+- Production: `VisitManagement/appsettings.Production.json`
+
+**📘 Complete Setup Guide**: See [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md) for:
+- How to create SQL Server users
+- Connection string examples
+- Troubleshooting common issues
+- Security best practices
+
+**Alternative**: You can switch to SQLite (no SQL Server needed) by changing the connection string to:
+```json
+"DefaultConnection": "Data Source=visitmanagement.db"
+```
+See [DATABASE_SETUP.md](DATABASE_SETUP.md) for more options.
 
 ### Database Errors
 
-If you encounter the error `Invalid object name 'Visits'`, it means the database hasn't been created yet. Follow these steps:
+**Error: "Login failed for user 'YOUR_USERNAME'"**
 
-1. **Install EF Core Tools** (if not already installed):
-   ```bash
-   dotnet tool install --global dotnet-ef --version 8.0.0
+1. **Update credentials** in `appsettings.json`:
+   ```json
+   "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=VisitManagement;User Id=YOUR_ACTUAL_USERNAME;Password=YOUR_ACTUAL_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true"
    ```
 
-2. **Navigate to the project folder**:
+2. **Verify SQL Authentication is enabled** - See [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md) Step 1
+
+3. **Check SQL Server is running**:
+   - Open Services (services.msc)
+   - Find "SQL Server (SQLEXPRESS)" or "SQL Server (MSSQLSERVER)"
+   - Ensure status is "Running"
+
+**Error: "Invalid object name 'Visits'"**
+
+The database hasn't been created yet. Follow these steps:
+
+1. **Verify connection string** is correct in appsettings.json
+
+2. **Run the application** (database is created automatically):
    ```bash
    cd VisitManagement
+   dotnet run
    ```
 
-3. **Apply the migration to create the database**:
+3. **Alternative - Use migrations** (if automatic creation fails):
    ```bash
+   dotnet tool install --global dotnet-ef --version 8.0.0
+   cd VisitManagement
    dotnet ef database update
    ```
-
-   This will create the database with all tables and seed data.
 
 ### Decimal Precision Warning
 
@@ -306,9 +354,29 @@ The warning about `TcvMnUsd` decimal precision has been resolved in the latest v
 3. Create a fresh migration: `dotnet ef migrations add InitialCreate`
 4. Update the database: `dotnet ef database update`
 
-### Connection String Issues
+### Connection String Examples
 
-**Current Configuration (SQLite)**:
+**SQL Server Express (most common for development)**:
+```json
+"DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=VisitManagement;User Id=visitapp;Password=YourPassword123;TrustServerCertificate=True;MultipleActiveResultSets=true"
+```
+
+**Default SQL Server Instance**:
+```json
+"DefaultConnection": "Server=localhost;Database=VisitManagement;User Id=visitapp;Password=YourPassword123;TrustServerCertificate=True;MultipleActiveResultSets=true"
+```
+
+**Windows Authentication** (no password needed):
+```json
+"DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=VisitManagement;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
+```
+
+**SQLite** (alternative, no SQL Server needed):
+```json
+"DefaultConnection": "Data Source=visitmanagement.db"
+```
+
+For more connection string examples and troubleshooting, see [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md).
 ```json
 "DefaultConnection": "Data Source=visitmanagement.db"
 ```
