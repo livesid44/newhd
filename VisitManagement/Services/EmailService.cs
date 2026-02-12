@@ -111,7 +111,7 @@ namespace VisitManagement.Services
                 .Replace("{Category}", visit.Category?.ToString() ?? "Not assigned")
                 .Replace("{SalesSpoc}", visit.SalesSpoc ?? "")
                 .Replace("{OpportunityType}", visit.OpportunityType.ToString())
-                .Replace("{NameAndAttendees}", visit.NameAndNoOfAttendees ?? "");
+                .Replace("{NameAndAttendees}", visit.VisitorsName ?? "");
         }
     }
 }
