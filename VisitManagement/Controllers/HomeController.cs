@@ -35,6 +35,22 @@ public class HomeController : Controller
         var confirmedVisits = visits.Count(v => v.VisitStatus == VisitStatus.Confirmed);
         var tentativeVisits = visits.Count(v => v.VisitStatus == VisitStatus.Tentative);
         
+        // Month-over-Month statistics
+        var currentMonth = DateTime.Now;
+        var startOfCurrentMonth = new DateTime(currentMonth.Year, currentMonth.Month, 1);
+        var startOfPreviousMonth = startOfCurrentMonth.AddMonths(-1);
+        
+        var currentMonthVisits = visits.Count(v => v.VisitDate >= startOfCurrentMonth && v.VisitDate < startOfCurrentMonth.AddMonths(1));
+        var previousMonthVisits = visits.Count(v => v.VisitDate >= startOfPreviousMonth && v.VisitDate < startOfCurrentMonth);
+        var monthOverMonthChange = currentMonthVisits - previousMonthVisits;
+        
+        // Visit type segregation (Prospect vs Operations)
+        var prospectVisits = visits.Count(v => v.TypeOfVisit != null && 
+            (v.TypeOfVisit.Contains("Prospect", StringComparison.OrdinalIgnoreCase)));
+        var operationsVisits = visits.Count(v => v.TypeOfVisit != null && 
+            (v.TypeOfVisit.Contains("Operations", StringComparison.OrdinalIgnoreCase) || 
+             v.TypeOfVisit.Contains("Ops", StringComparison.OrdinalIgnoreCase)));
+        
         // Date-wise statistics (Last 30 days)
         var last30Days = DateTime.Now.AddDays(-30);
         var visitsLast30Days = visits.Where(v => v.VisitDate >= last30Days).ToList();
@@ -48,6 +64,45 @@ public class HomeController : Controller
                 Date = g.Key,
                 Count = g.Count()
             })
+            .ToList();
+
+        // Location-wise statistics
+        var locationWiseStats = visits
+            .Where(v => !string.IsNullOrEmpty(v.Location))
+            .GroupBy(v => v.Location)
+            .Select(g => new LocationWiseCount
+            {
+                Location = g.Key,
+                Count = g.Count()
+            })
+            .OrderByDescending(l => l.Count)
+            .Take(10)
+            .ToList();
+
+        // Sales SPOC-wise statistics
+        var salesSpocWiseStats = visits
+            .Where(v => !string.IsNullOrEmpty(v.SalesSpoc))
+            .GroupBy(v => v.SalesSpoc)
+            .Select(g => new SalesSpocWiseCount
+            {
+                SalesSpoc = g.Key,
+                Count = g.Count()
+            })
+            .OrderByDescending(s => s.Count)
+            .Take(10)
+            .ToList();
+
+        // Vertical-wise statistics
+        var verticalWiseStats = visits
+            .Where(v => !string.IsNullOrEmpty(v.Vertical))
+            .GroupBy(v => v.Vertical)
+            .Select(g => new VerticalWiseCount
+            {
+                Vertical = g.Key,
+                Count = g.Count()
+            })
+            .OrderByDescending(v => v.Count)
+            .Take(10)
             .ToList();
 
         // User-wise statistics (for admin)
@@ -74,6 +129,19 @@ public class HomeController : Controller
         var upcomingVisits = visits
             .Where(v => v.VisitDate >= DateTime.Now)
             .OrderBy(v => v.VisitDate)
+            .Take(10)
+            .ToList();
+        
+        // Upcoming visits segregated by type
+        var upcomingProspectVisits = upcomingVisits
+            .Where(v => v.TypeOfVisit != null && v.TypeOfVisit.Contains("Prospect", StringComparison.OrdinalIgnoreCase))
+            .Take(5)
+            .ToList();
+        
+        var upcomingOperationsVisits = upcomingVisits
+            .Where(v => v.TypeOfVisit != null && 
+                (v.TypeOfVisit.Contains("Operations", StringComparison.OrdinalIgnoreCase) || 
+                 v.TypeOfVisit.Contains("Ops", StringComparison.OrdinalIgnoreCase)))
             .Take(5)
             .ToList();
 
@@ -82,10 +150,20 @@ public class HomeController : Controller
             TotalVisits = totalVisits,
             ConfirmedVisits = confirmedVisits,
             TentativeVisits = tentativeVisits,
+            CurrentMonthVisits = currentMonthVisits,
+            PreviousMonthVisits = previousMonthVisits,
+            MonthOverMonthChange = monthOverMonthChange,
+            ProspectVisits = prospectVisits,
+            OperationsVisits = operationsVisits,
             DateWiseStats = dateWiseStats,
             UserWiseStats = userWiseStats,
+            LocationWiseStats = locationWiseStats,
+            SalesSpocWiseStats = salesSpocWiseStats,
+            VerticalWiseStats = verticalWiseStats,
             RecentVisits = recentVisits,
             UpcomingVisits = upcomingVisits,
+            UpcomingProspectVisits = upcomingProspectVisits,
+            UpcomingOperationsVisits = upcomingOperationsVisits,
             IsAdmin = isAdmin
         };
 

@@ -1,4 +1,4 @@
-﻿@model VisitManagement.ViewModels.DashboardViewModel
+@model VisitManagement.ViewModels.DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
 }
@@ -10,9 +10,9 @@
         </div>
     </div>
 
-    <!-- Statistics Cards -->
+    <!-- Top Statistics Cards -->
     <div class="row mb-4">
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body text-center">
                     <i class="bi bi-calendar-check text-primary" style="font-size: 2.5rem;"></i>
@@ -21,27 +21,125 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-month text-info" style="font-size: 2.5rem;"></i>
+                    <h2 class="mt-3 mb-0 text-info">@Model.CurrentMonthVisits</h2>
+                    <p class="text-muted mb-0">Current Month</p>
+                    @if (Model.MonthOverMonthChange != 0)
+                    {
+                        <small class="@(Model.MonthOverMonthChange > 0 ? "text-success" : "text-danger")">
+                            <i class="bi bi-arrow-@(Model.MonthOverMonthChange > 0 ? "up" : "down")"></i>
+                            @Math.Abs(Model.MonthOverMonthChange) vs last month
+                        </small>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body text-center">
                     <i class="bi bi-check-circle text-success" style="font-size: 2.5rem;"></i>
                     <h2 class="mt-3 mb-0 text-success">@Model.ConfirmedVisits</h2>
-                    <p class="text-muted mb-0">Confirmed Visits</p>
+                    <p class="text-muted mb-0">Confirmed</p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-3">
+        <div class="col-md-3 mb-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-body text-center">
                     <i class="bi bi-clock-history text-warning" style="font-size: 2.5rem;"></i>
                     <h2 class="mt-3 mb-0 text-warning">@Model.TentativeVisits</h2>
-                    <p class="text-muted mb-0">Tentative Visits</p>
+                    <p class="text-muted mb-0">Tentative</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Charts Section -->
+    <!-- Visit Type Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-briefcase text-purple" style="font-size: 2rem;"></i>
+                    <h3 class="mt-2 mb-0" style="color: #6f42c1;">@Model.ProspectVisits</h3>
+                    <p class="text-muted mb-0">Prospect Visits</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-gear text-secondary" style="font-size: 2rem;"></i>
+                    <h3 class="mt-2 mb-0 text-secondary">@Model.OperationsVisits</h3>
+                    <p class="text-muted mb-0">Operations Visits</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section Row 1 -->
+    <div class="row mb-4">
+        <!-- Location-wise Chart -->
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-geo-alt"></i> Location-wise Visits</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.LocationWiseStats.Any())
+                    {
+                        <canvas id="locationWiseChart" style="max-height: 250px;"></canvas>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-4">No location data available</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Sales SPOC-wise Chart -->
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-person-badge"></i> Sales SPOC-wise Visits</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.SalesSpocWiseStats.Any())
+                    {
+                        <canvas id="salesSpocWiseChart" style="max-height: 250px;"></canvas>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-4">No sales SPOC data available</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Vertical-wise Chart -->
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-diagram-3"></i> Vertical-wise Visits</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.VerticalWiseStats.Any())
+                    {
+                        <canvas id="verticalWiseChart" style="max-height: 250px;"></canvas>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-4">No vertical data available</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section Row 2 -->
     <div class="row mb-4">
         <!-- Date-wise Chart -->
         <div class="col-md-@(Model.IsAdmin ? "6" : "12") mb-3">
@@ -78,7 +176,98 @@
         }
     </div>
 
-    <!-- Recent and Upcoming Visits -->
+    <!-- Upcoming Visits Segregated by Type -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-briefcase"></i> Upcoming Prospect Visits</h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.UpcomingProspectVisits.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0" style="font-size: 13px;">
+                                <thead>
+                                    <tr style="background-color: #e6e7e8;">
+                                        <th style="color: #e31837;">Client</th>
+                                        <th style="color: #e31837;">Date</th>
+                                        <th style="color: #e31837;">Location</th>
+                                        <th style="color: #e31837;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var visit in Model.UpcomingProspectVisits)
+                                    {
+                                        <tr>
+                                            <td>@visit.AccountName</td>
+                                            <td>@visit.VisitDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@visit.Location</td>
+                                            <td>
+                                                <span class="badge @(visit.VisitStatus == VisitManagement.Models.VisitStatus.Confirmed ? "bg-success" : "bg-warning")">
+                                                    @visit.VisitStatus
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-4">No upcoming prospect visits</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-gear"></i> Upcoming Operations Visits</h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.UpcomingOperationsVisits.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover mb-0" style="font-size: 13px;">
+                                <thead>
+                                    <tr style="background-color: #e6e7e8;">
+                                        <th style="color: #e31837;">Client</th>
+                                        <th style="color: #e31837;">Date</th>
+                                        <th style="color: #e31837;">Location</th>
+                                        <th style="color: #e31837;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var visit in Model.UpcomingOperationsVisits)
+                                    {
+                                        <tr>
+                                            <td>@visit.AccountName</td>
+                                            <td>@visit.VisitDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@visit.Location</td>
+                                            <td>
+                                                <span class="badge @(visit.VisitStatus == VisitManagement.Models.VisitStatus.Confirmed ? "bg-success" : "bg-warning")">
+                                                    @visit.VisitStatus
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center py-4">No upcoming operations visits</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Visits and Content Repository -->
     <div class="row">
         <!-- Recent Visits -->
         <div class="col-md-6 mb-3">
@@ -93,8 +282,9 @@
                             <table class="table table-sm table-hover mb-0" style="font-size: 13px;">
                                 <thead>
                                     <tr style="background-color: #e6e7e8;">
-                                        <th style="color: #e31837;">Account</th>
+                                        <th style="color: #e31837;">Client</th>
                                         <th style="color: #e31837;">Date</th>
+                                        <th style="color: #e31837;">Type</th>
                                         <th style="color: #e31837;">Status</th>
                                     </tr>
                                 </thead>
@@ -104,6 +294,7 @@
                                         <tr>
                                             <td>@visit.AccountName</td>
                                             <td>@visit.VisitDate.ToString("dd/MM/yyyy")</td>
+                                            <td><small>@visit.TypeOfVisit</small></td>
                                             <td>
                                                 <span class="badge @(visit.VisitStatus == VisitManagement.Models.VisitStatus.Confirmed ? "bg-success" : "bg-warning")">
                                                     @visit.VisitStatus
@@ -123,34 +314,37 @@
             </div>
         </div>
 
-        <!-- Upcoming Visits -->
+        <!-- Content Repository Links -->
         <div class="col-md-6 mb-3">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white">
-                    <h5 class="mb-0 text-danger"><i class="bi bi-calendar-event"></i> Upcoming Visits</h5>
+                    <h5 class="mb-0 text-danger"><i class="bi bi-folder2-open"></i> Content Repository</h5>
                 </div>
                 <div class="card-body p-0">
-                    @if (Model.UpcomingVisits.Any())
+                    @{
+                        var visitsWithRepository = Model.RecentVisits.Where(v => !string.IsNullOrEmpty(v.Repository)).ToList();
+                    }
+                    @if (visitsWithRepository.Any())
                     {
                         <div class="table-responsive">
                             <table class="table table-sm table-hover mb-0" style="font-size: 13px;">
                                 <thead>
                                     <tr style="background-color: #e6e7e8;">
-                                        <th style="color: #e31837;">Account</th>
+                                        <th style="color: #e31837;">Client</th>
                                         <th style="color: #e31837;">Date</th>
-                                        <th style="color: #e31837;">Status</th>
+                                        <th style="color: #e31837;">Repository Link</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var visit in Model.UpcomingVisits)
+                                    @foreach (var visit in visitsWithRepository)
                                     {
                                         <tr>
                                             <td>@visit.AccountName</td>
                                             <td>@visit.VisitDate.ToString("dd/MM/yyyy")</td>
                                             <td>
-                                                <span class="badge @(visit.VisitStatus == VisitManagement.Models.VisitStatus.Confirmed ? "bg-success" : "bg-warning")">
-                                                    @visit.VisitStatus
-                                                </span>
+                                                <a href="@visit.Repository" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-link-45deg"></i> Open
+                                                </a>
                                             </td>
                                         </tr>
                                     }
@@ -160,7 +354,7 @@
                     }
                     else
                     {
-                        <p class="text-muted text-center py-4">No upcoming visits</p>
+                        <p class="text-muted text-center py-4">No repository links available</p>
                     }
                 </div>
             </div>
@@ -171,6 +365,112 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
+        // Common chart colors
+        const techMahindraPrimary = '#e31837';
+        const techMahindraSecondary = '#0a0838';
+        const chartColors = [
+            '#e31837', '#0a0838', '#f39c12', '#27ae60', '#3498db',
+            '#9b59b6', '#e74c3c', '#1abc9c', '#34495e', '#16a085'
+        ];
+
+        // Location-wise Chart
+        @if (Model.LocationWiseStats.Any())
+        {
+            <text>
+            var locationWiseCtx = document.getElementById('locationWiseChart').getContext('2d');
+            var locationWiseChart = new Chart(locationWiseCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", Model.LocationWiseStats.Select(l => $"'{l.Location}'")))],
+                    datasets: [{
+                        data: [@Html.Raw(string.Join(",", Model.LocationWiseStats.Select(l => l.Count)))],
+                        backgroundColor: chartColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: { size: 11 }
+                            }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+
+        // Sales SPOC-wise Chart
+        @if (Model.SalesSpocWiseStats.Any())
+        {
+            <text>
+            var salesSpocWiseCtx = document.getElementById('salesSpocWiseChart').getContext('2d');
+            var salesSpocWiseChart = new Chart(salesSpocWiseCtx, {
+                type: 'bar',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", Model.SalesSpocWiseStats.Select(s => $"'{s.SalesSpoc}'")))],
+                    datasets: [{
+                        label: 'Visits',
+                        data: [@Html.Raw(string.Join(",", Model.SalesSpocWiseStats.Select(s => s.Count)))],
+                        backgroundColor: techMahindraSecondary,
+                        borderColor: techMahindraSecondary,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+
+        // Vertical-wise Chart
+        @if (Model.VerticalWiseStats.Any())
+        {
+            <text>
+            var verticalWiseCtx = document.getElementById('verticalWiseChart').getContext('2d');
+            var verticalWiseChart = new Chart(verticalWiseCtx, {
+                type: 'pie',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", Model.VerticalWiseStats.Select(v => $"'{v.Vertical}'")))],
+                    datasets: [{
+                        data: [@Html.Raw(string.Join(",", Model.VerticalWiseStats.Select(v => v.Count)))],
+                        backgroundColor: chartColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: { size: 11 }
+                            }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+
         // Date-wise Chart
         @if (Model.DateWiseStats.Any())
         {
@@ -183,7 +483,7 @@
                     datasets: [{
                         label: 'Visits',
                         data: [@Html.Raw(string.Join(",", Model.DateWiseStats.Select(d => d.Count)))],
-                        borderColor: '#e31837',
+                        borderColor: techMahindraPrimary,
                         backgroundColor: 'rgba(227, 24, 55, 0.1)',
                         tension: 0.4,
                         fill: true
@@ -193,16 +493,12 @@
                     responsive: true,
                     maintainAspectRatio: true,
                     plugins: {
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
+                            ticks: { stepSize: 1 }
                         }
                     }
                 }
@@ -222,8 +518,8 @@
                     datasets: [{
                         label: 'Visits',
                         data: [@Html.Raw(string.Join(",", Model.UserWiseStats.Select(u => u.Count)))],
-                        backgroundColor: '#0a0838',
-                        borderColor: '#0a0838',
+                        backgroundColor: techMahindraSecondary,
+                        borderColor: techMahindraSecondary,
                         borderWidth: 1
                     }]
                 },
@@ -231,16 +527,12 @@
                     responsive: true,
                     maintainAspectRatio: true,
                     plugins: {
-                        legend: {
-                            display: false
-                        }
+                        legend: { display: false }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
+                            ticks: { stepSize: 1 }
                         }
                     }
                 }
