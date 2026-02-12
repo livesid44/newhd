@@ -102,14 +102,26 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="LocationCsSpoc">Location CS SPOC</label>
-                    <input asp-for="LocationCsSpoc" class="form-control form-control-sm" />
+                    <select asp-for="LocationCsSpoc" class="form-select form-select-sm">
+                        <option value="">-- Select Location CS SPOC --</option>
+                        @foreach (var item in ViewBag.LocationCsSpocList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="LocationCsSpoc" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="SalesSpoc">Sales SPOC <span class="text-red">*</span></label>
-                    <input asp-for="SalesSpoc" class="form-control form-control-sm" />
+                    <select asp-for="SalesSpoc" class="form-select form-select-sm">
+                        <option value="">-- Select Sales SPOC --</option>
+                        @foreach (var item in ViewBag.SalesSpocList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="SalesSpoc" class="text-danger"></span>
                 </div>
             </div>
@@ -129,7 +141,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="VerticalHead">Vertical Head</label>
-                    <input asp-for="VerticalHead" class="form-control form-control-sm" />
+                    <select asp-for="VerticalHead" class="form-select form-select-sm">
+                        <option value="">-- Select Vertical Head --</option>
+                        @foreach (var item in ViewBag.VerticalHeadList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="VerticalHead" class="text-danger"></span>
                 </div>
             </div>
@@ -140,7 +158,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="AccountOwner">Account Owner</label>
-                    <input asp-for="AccountOwner" class="form-control form-control-sm" />
+                    <select asp-for="AccountOwner" class="form-select form-select-sm">
+                        <option value="">-- Select Account Owner --</option>
+                        @foreach (var item in ViewBag.AccountOwnerList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="AccountOwner" class="text-danger"></span>
                 </div>
             </div>

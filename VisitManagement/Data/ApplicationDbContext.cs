@@ -239,6 +239,154 @@ namespace VisitManagement.Data
                     Location = "Global",
                     IsActive = true,
                     CreatedDate = DateTime.Now
+                },
+                // Location CS SPOC stakeholders
+                new Stakeholder
+                {
+                    Id = 6,
+                    FullName = "Rajesh Kumar - Pune CS SPOC",
+                    Email = "rajesh.kumar@techmahindra.com",
+                    PhoneNumber = "+91-98765-43210",
+                    Team = "Customer Success",
+                    Role = "Location CS SPOC",
+                    Location = "Pune",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 7,
+                    FullName = "Priya Sharma - Mumbai CS SPOC",
+                    Email = "priya.sharma@techmahindra.com",
+                    PhoneNumber = "+91-98765-43211",
+                    Team = "Customer Success",
+                    Role = "Location CS SPOC",
+                    Location = "Mumbai",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 8,
+                    FullName = "Amit Patel - Bangalore CS SPOC",
+                    Email = "amit.patel@techmahindra.com",
+                    PhoneNumber = "+91-98765-43212",
+                    Team = "Customer Success",
+                    Role = "Location CS SPOC",
+                    Location = "Bangalore",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                // Sales SPOC stakeholders
+                new Stakeholder
+                {
+                    Id = 9,
+                    FullName = "John Anderson - Enterprise Sales",
+                    Email = "john.anderson@techmahindra.com",
+                    PhoneNumber = "+1-555-1001",
+                    Team = "Sales",
+                    Role = "Sales SPOC",
+                    Location = "North America",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 10,
+                    FullName = "Sarah Williams - BFSI Sales",
+                    Email = "sarah.williams@techmahindra.com",
+                    PhoneNumber = "+1-555-1002",
+                    Team = "Sales",
+                    Role = "Sales SPOC",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 11,
+                    FullName = "Michael Chen - APAC Sales",
+                    Email = "michael.chen@techmahindra.com",
+                    PhoneNumber = "+65-9876-5432",
+                    Team = "Sales",
+                    Role = "Sales SPOC",
+                    Location = "Singapore",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                // Vertical Head stakeholders
+                new Stakeholder
+                {
+                    Id = 12,
+                    FullName = "David Thompson - Technology Vertical Head",
+                    Email = "david.thompson@techmahindra.com",
+                    PhoneNumber = "+1-555-2001",
+                    Team = "Vertical Leadership",
+                    Role = "Vertical Head",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 13,
+                    FullName = "Jennifer Lee - Finance Vertical Head",
+                    Email = "jennifer.lee@techmahindra.com",
+                    PhoneNumber = "+1-555-2002",
+                    Team = "Vertical Leadership",
+                    Role = "Vertical Head",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 14,
+                    FullName = "Robert Martinez - Healthcare Vertical Head",
+                    Email = "robert.martinez@techmahindra.com",
+                    PhoneNumber = "+1-555-2003",
+                    Team = "Vertical Leadership",
+                    Role = "Vertical Head",
+                    Location = "Global",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                // Account Owner stakeholders
+                new Stakeholder
+                {
+                    Id = 15,
+                    FullName = "Lisa Johnson - Strategic Accounts",
+                    Email = "lisa.johnson@techmahindra.com",
+                    PhoneNumber = "+1-555-3001",
+                    Team = "Account Management",
+                    Role = "Account Owner",
+                    Location = "North America",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 16,
+                    FullName = "Mark Davis - Enterprise Accounts",
+                    Email = "mark.davis@techmahindra.com",
+                    PhoneNumber = "+44-20-7123-4567",
+                    Team = "Account Management",
+                    Role = "Account Owner",
+                    Location = "London",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
+                },
+                new Stakeholder
+                {
+                    Id = 17,
+                    FullName = "Anita Desai - Key Accounts",
+                    Email = "anita.desai@techmahindra.com",
+                    PhoneNumber = "+91-98765-43220",
+                    Team = "Account Management",
+                    Role = "Account Owner",
+                    Location = "India",
+                    IsActive = true,
+                    CreatedDate = DateTime.Now
                 }
             );
         }

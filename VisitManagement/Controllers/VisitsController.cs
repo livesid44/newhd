@@ -325,6 +325,42 @@ namespace VisitManagement.Controllers
                 "Delivery",
                 "Others"
             };
+
+            // Populate stakeholder-based dropdowns from database
+            var activeStakeholders = _context.Stakeholders.Where(s => s.IsActive).ToList();
+
+            // Location CS SPOC dropdown
+            ViewBag.LocationCsSpocList = activeStakeholders
+                .Where(s => s.Role == "Location CS SPOC")
+                .OrderBy(s => s.Location)
+                .ThenBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
+
+            // Sales SPOC dropdown
+            ViewBag.SalesSpocList = activeStakeholders
+                .Where(s => s.Role == "Sales SPOC")
+                .OrderBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
+
+            // Vertical Head dropdown
+            ViewBag.VerticalHeadList = activeStakeholders
+                .Where(s => s.Role == "Vertical Head")
+                .OrderBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
+
+            // Account Owner dropdown
+            ViewBag.AccountOwnerList = activeStakeholders
+                .Where(s => s.Role == "Account Owner")
+                .OrderBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
         }
 
         private VisitCategory DetermineVisitCategory(Visit visit)

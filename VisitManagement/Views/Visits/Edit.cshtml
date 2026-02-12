@@ -51,7 +51,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label asp-for="SalesSpoc">Sales SPOC <span class="text-red">*</span></label>
-                    <input asp-for="SalesSpoc" class="form-control form-control-sm" />
+                    <select asp-for="SalesSpoc" class="form-select form-select-sm">
+                        <option value="">-- Select Sales SPOC --</option>
+                        @foreach (var item in ViewBag.SalesSpocList as List<string>)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
                     <span asp-validation-for="SalesSpoc" class="text-danger"></span>
                 </div>
             </div>
