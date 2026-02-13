@@ -1,0 +1,132 @@
+@model VisitManagement.Models.TaskAssignment
+
+@{
+    ViewData["Title"] = "Edit Task Assignment";
+}
+
+<div class="pg-title">
+    Edit Task Assignment
+</div>
+<div class="white-bg-main">
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CreatedDate" />
+        <input type="hidden" asp-for="CreatedBy" />
+        
+        <!-- Row 1: Visit and Task Name -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="VisitId">Visit <span class="text-red">*</span></label>
+                    <select asp-for="VisitId" class="form-select form-select-sm">
+                        <option value="">-- Select Visit --</option>
+                        @foreach (var visit in ViewBag.Visits as List<VisitManagement.Models.Visit>)
+                        {
+                            <option value="@visit.Id">@visit.AccountName - @visit.VisitDate.ToString("MM/dd/yyyy")</option>
+                        }
+                    </select>
+                    <span asp-validation-for="VisitId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="TaskName">Task Name <span class="text-red">*</span></label>
+                    <input asp-for="TaskName" class="form-control form-control-sm" maxlength="500" />
+                    <span asp-validation-for="TaskName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Assigned To Team and Person -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="AssignedToTeam">Assigned To Team <span class="text-red">*</span></label>
+                    <select asp-for="AssignedToTeam" class="form-select form-select-sm">
+                        <option value="">-- Select Team --</option>
+                        <option value="Client Experience">Client Experience</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Creative Hub">Creative Hub</option>
+                        <option value="Customer Success">Customer Success</option>
+                        <option value="TIM">TIM</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Operations">Operations</option>
+                        <option value="Finance">Finance</option>
+                    </select>
+                    <span asp-validation-for="AssignedToTeam" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="AssignedToPerson">Assigned To Person</label>
+                    <input asp-for="AssignedToPerson" class="form-control form-control-sm" maxlength="200" />
+                    <span asp-validation-for="AssignedToPerson" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Due Date, Priority, Status -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="DueDate">Due Date <span class="text-red">*</span></label>
+                    <input asp-for="DueDate" class="form-control form-control-sm" type="date" />
+                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Priority">Priority <span class="text-red">*</span></label>
+                    <select asp-for="Priority" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.TaskPriority>()">
+                        <option value="">-- Select Priority --</option>
+                    </select>
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Status">Status <span class="text-red">*</span></label>
+                    <select asp-for="Status" class="form-select form-select-sm" asp-items="Html.GetEnumSelectList<VisitManagement.Models.TaskAssignmentStatus>()">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 4: Description -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Description">Description</label>
+                    <textarea asp-for="Description" class="form-control form-control-sm" rows="4" maxlength="1000"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 5: Completion Notes (only if status is Completed) -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="CompletionNotes">Completion Notes</label>
+                    <textarea asp-for="CompletionNotes" class="form-control form-control-sm" rows="3" maxlength="1000"></textarea>
+                    <span asp-validation-for="CompletionNotes" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
