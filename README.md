@@ -42,12 +42,14 @@ A comprehensive ASP.NET Core MVC application for managing client visits and user
 ## Prerequisites
 
 - .NET 8.0 SDK or later
-- **SQL Server** (choose one):
-  - SQL Server 2016+ (any edition)
-  - SQL Server Express (free) - recommended for development
+- **Database** (choose one):
+  - **SQLite** (default) - No installation required! Works out of the box
+  - SQL Server 2016+ (any edition) - For production or if preferred
+  - SQL Server Express (free) - Good for development
   - LocalDB (included with Visual Studio)
   - Azure SQL Database
 - Visual Studio 2022 / Visual Studio Code / Rider (optional)
+- SQL Server Management Studio (SSMS) - Optional, only if using SQL Server
 - SQL Server Management Studio (SSMS) - recommended for database management
 
 **Note:** The application supports both SQL Server (with SQL Authentication or Windows Authentication) and SQLite. See [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md) for configuration details.
@@ -283,32 +285,61 @@ Potential improvements for future versions:
 
 ## Troubleshooting
 
+### SQL Server Connection Error
+
+**Error: "Error Locating Server/Instance Specified" or "A network-related or instance-specific error"**
+
+This is the most common error when first running the application. It means the app cannot connect to SQL Server.
+
+**Quick Fix (Recommended for Development):**
+
+The application is now configured to use **SQLite** by default, which requires no installation or setup!
+
+Simply run:
+```bash
+dotnet run
+```
+
+The database file (`visitmanagement.db`) will be created automatically in the project folder.
+
+**If you need SQL Server:**
+
+1. **Verify SQL Server is running**:
+   - Open Services (services.msc)
+   - Find "SQL Server (SQLEXPRESS)" or "SQL Server (MSSQLSERVER)"
+   - Ensure status is "Running" - if not, right-click and select "Start"
+
+2. **Update connection string** in `appsettings.json`:
+   ```json
+   "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=VisitManagement;User Id=YOUR_USERNAME;Password=YOUR_PASSWORD;TrustServerCertificate=True;MultipleActiveResultSets=true"
+   ```
+   Replace `YOUR_USERNAME` and `YOUR_PASSWORD` with actual credentials.
+
+3. **See detailed guide**: [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md)
+
 ### Database Configuration
 
 **Question: Where is the data stored?**
 
-The application is configured to use **SQL Server with SQL Authentication** by default.
-
-- **Database Server**: Your local SQL Server instance (localhost, localhost\SQLEXPRESS, or (localdb)\MSSQLLocalDB)
-- **Database Name**: `VisitManagement`
-- **Authentication**: SQL Server Authentication (username and password)
+By default, the application uses **SQLite** for easy development:
+- **Database Type**: SQLite (file-based, no installation required)
+- **Database File**: `visitmanagement.db` (created in VisitManagement folder)
 - **Created automatically**: Database and tables are created when you first run the application
+- **Portable**: You can backup by copying the .db file
+
+**To switch to SQL Server** (for production or if you prefer):
+1. Update connection string in `appsettings.json` to a SQL Server connection string (see examples below)
+2. Ensure SQL Server is running
+3. Run the application - database will be created automatically
 
 **Connection String Location**: 
 - Development: `VisitManagement/appsettings.Development.json`
-- Production: `VisitManagement/appsettings.Production.json`
+- Production: `VisitManagement/appsettings.json`
 
-**📘 Complete Setup Guide**: See [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md) for:
-- How to create SQL Server users
-- Connection string examples
-- Troubleshooting common issues
-- Security best practices
-
-**Alternative**: You can switch to SQLite (no SQL Server needed) by changing the connection string to:
-```json
-"DefaultConnection": "Data Source=visitmanagement.db"
-```
-See [DATABASE_SETUP.md](DATABASE_SETUP.md) for more options.
+**📘 Complete Setup Guides**:
+- [SQL_SERVER_SETUP.md](SQL_SERVER_SETUP.md) - SQL Server configuration
+- [DATABASE_SETUP.md](DATABASE_SETUP.md) - Database options
+- [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Common issues and solutions
 
 ### Database Errors
 
