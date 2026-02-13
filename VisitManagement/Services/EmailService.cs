@@ -31,7 +31,12 @@ namespace VisitManagement.Services
             var subject = ReplacePlaceholders(template.Subject, visit);
             var body = ReplacePlaceholders(template.Body, visit);
 
-            return await SendEmailAsync(userEmail, subject, body);
+            return await SendEmailAsync(
+                template.ToRecipients ?? userEmail, 
+                template.CcRecipients, 
+                template.BccRecipients, 
+                subject, 
+                body);
         }
 
         public async Task<bool> SendVisitUpdatedEmailAsync(Visit visit, string userEmail)
@@ -48,16 +53,21 @@ namespace VisitManagement.Services
             var subject = ReplacePlaceholders(template.Subject, visit);
             var body = ReplacePlaceholders(template.Body, visit);
 
-            return await SendEmailAsync(userEmail, subject, body);
+            return await SendEmailAsync(
+                template.ToRecipients ?? userEmail, 
+                template.CcRecipients, 
+                template.BccRecipients, 
+                subject, 
+                body);
         }
 
         public async Task<bool> SendTestEmailAsync(string toEmail)
         {
-            return await SendEmailAsync(toEmail, "Test Email from Visit Management System", 
+            return await SendEmailAsync(toEmail, null, null, "Test Email from Visit Management System", 
                 "This is a test email to verify your SMTP configuration is working correctly.");
         }
 
-        private async Task<bool> SendEmailAsync(string toEmail, string subject, string body)
+        private async Task<bool> SendEmailAsync(string toEmails, string? ccEmails, string? bccEmails, string subject, string body)
         {
             try
             {
@@ -89,15 +99,61 @@ namespace VisitManagement.Services
                     IsBodyHtml = true
                 };
 
-                message.To.Add(toEmail);
+                // Add TO recipients
+                var toAddresses = string.IsNullOrEmpty(toEmails) 
+                    ? (settings.DefaultToRecipients ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    : toEmails.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var email in toAddresses)
+                {
+                    var trimmedEmail = email.Trim();
+                    if (!string.IsNullOrEmpty(trimmedEmail))
+                    {
+                        message.To.Add(trimmedEmail);
+                    }
+                }
+
+                // Add CC recipients
+                var ccAddresses = string.IsNullOrEmpty(ccEmails)
+                    ? (settings.DefaultCcRecipients ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    : ccEmails.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var email in ccAddresses)
+                {
+                    var trimmedEmail = email.Trim();
+                    if (!string.IsNullOrEmpty(trimmedEmail))
+                    {
+                        message.CC.Add(trimmedEmail);
+                    }
+                }
+
+                // Add BCC recipients
+                var bccAddresses = string.IsNullOrEmpty(bccEmails)
+                    ? (settings.DefaultBccRecipients ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    : bccEmails.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var email in bccAddresses)
+                {
+                    var trimmedEmail = email.Trim();
+                    if (!string.IsNullOrEmpty(trimmedEmail))
+                    {
+                        message.Bcc.Add(trimmedEmail);
+                    }
+                }
+
+                if (message.To.Count == 0)
+                {
+                    _logger.LogWarning("No TO recipients specified for email");
+                    return false;
+                }
 
                 await smtpClient.SendMailAsync(message);
-                _logger.LogInformation($"Email sent successfully to {toEmail}");
+                _logger.LogInformation($"Email sent successfully to {string.Join(", ", message.To.Select(t => t.Address))}");
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error sending email to {toEmail}");
+                _logger.LogError(ex, $"Error sending email");
                 return false;
             }
         }

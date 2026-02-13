@@ -64,6 +64,9 @@ namespace VisitManagement.Controllers
                     existing.Password = settings.Password;
                     existing.EnableSsl = settings.EnableSsl;
                     existing.EnableNotifications = settings.EnableNotifications;
+                    existing.DefaultToRecipients = settings.DefaultToRecipients;
+                    existing.DefaultCcRecipients = settings.DefaultCcRecipients;
+                    existing.DefaultBccRecipients = settings.DefaultBccRecipients;
                     existing.ModifiedDate = DateTime.Now;
                 }
 
