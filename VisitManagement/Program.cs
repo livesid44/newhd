@@ -79,10 +79,30 @@ using (var scope = app.Services.CreateScope())
         logger.LogInformation("Initializing database...");
         logger.LogInformation($"Using {(isSqlite ? "SQLite" : "SQL Server")} database");
         
-        // Ensure database is created
-        context.Database.EnsureCreated();
-        
-        logger.LogInformation("Database created successfully");
+        bool usedFallback = false;
+        try
+        {
+            // Apply pending migrations (this creates the database if it doesn't exist)
+            logger.LogInformation("Applying database migrations...");
+            context.Database.Migrate();
+            logger.LogInformation("Database migrations applied successfully");
+        }
+        catch (Microsoft.Data.Sqlite.SqliteException sqliteEx) when (sqliteEx.SqliteErrorCode == 1)
+        {
+            // SQLite syntax error - likely due to SQL Server migrations being incompatible
+            logger.LogWarning("Migration failed with SQLite syntax error. Using EnsureCreated() instead...");
+            logger.LogWarning("Note: Existing migrations were designed for SQL Server, not SQLite.");
+            
+            // Delete and recreate the database
+            logger.LogWarning("Deleting incomplete database...");
+            context.Database.EnsureDeleted();
+            logger.LogInformation("Incomplete database deleted");
+            
+            // Now create fresh database
+            context.Database.EnsureCreated();
+            logger.LogInformation("Database created successfully using EnsureCreated()");
+            usedFallback = true;
+        }
         
         // Create roles if they don't exist
         string[] roleNames = { "Admin", "User" };
