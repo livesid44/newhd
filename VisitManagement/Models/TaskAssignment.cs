@@ -62,6 +62,10 @@ namespace VisitManagement.Models
         [Required]
         [Display(Name = "Created By")]
         public string CreatedBy { get; set; } = string.Empty;
+
+        // Navigation properties
+        public ICollection<TaskComment> Comments { get; set; } = new List<TaskComment>();
+        public ICollection<TaskDocument> Documents { get; set; } = new List<TaskDocument>();
     }
 
     public enum TaskPriority

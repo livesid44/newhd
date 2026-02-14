@@ -18,6 +18,9 @@ namespace VisitManagement.Data
         public DbSet<TaskAssignment> TaskAssignments { get; set; }
         public DbSet<Checklist> Checklists { get; set; }
         public DbSet<Stakeholder> Stakeholders { get; set; }
+        public DbSet<TaskTemplate> TaskTemplates { get; set; }
+        public DbSet<TaskComment> TaskComments { get; set; }
+        public DbSet<TaskDocument> TaskDocuments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -462,6 +465,48 @@ namespace VisitManagement.Data
                     IsActive = true,
                     CreatedDate = DateTime.Now
                 }
+            );
+
+            // Seed data for Task Templates
+            modelBuilder.Entity<TaskTemplate>().HasData(
+                // Platinum CS Checklist
+                new TaskTemplate { Id = 1, Name = "Confirm executive accommodation (5-star hotel)", Description = "Book and confirm luxury accommodation for CXO visitors", Category = "Platinum CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Critical, EstimatedDays = 7, DisplayOrder = 1, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 2, Name = "Arrange private dining experience", Description = "Book private dining venue with curated menu", Category = "Platinum CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.High, EstimatedDays = 5, DisplayOrder = 2, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 3, Name = "Business/First class travel arrangements", Description = "Book premium air travel for visitors", Category = "Platinum CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Critical, EstimatedDays = 7, DisplayOrder = 3, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 4, Name = "Prepare executive welcome kit", Description = "Curate personalized welcome materials and gifts", Category = "Platinum CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Medium, EstimatedDays = 5, DisplayOrder = 4, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 5, Name = "Senior leadership engagement coordination", Description = "Schedule meetings with C-Suite members", Category = "Platinum CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Critical, EstimatedDays = 10, DisplayOrder = 5, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 6, Name = "Arrange facility tour with senior leaders", Description = "Organize comprehensive facility tour", Category = "Platinum CS", AssignedToTeam = "Operations", Priority = TaskPriority.High, EstimatedDays = 3, DisplayOrder = 6, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 7, Name = "Executive presentation materials", Description = "Prepare high-level strategic presentations", Category = "Platinum CS", AssignedToTeam = "Marketing", Priority = TaskPriority.High, EstimatedDays = 5, DisplayOrder = 7, IsActive = true, CreatedDate = DateTime.UtcNow },
+
+                // Gold CS Checklist
+                new TaskTemplate { Id = 8, Name = "Confirm premium accommodation (4-star hotel)", Description = "Book quality accommodation for VP/Director visitors", Category = "Gold CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.High, EstimatedDays = 5, DisplayOrder = 1, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 9, Name = "Arrange standard dining arrangements", Description = "Book dining venue for team dinner", Category = "Gold CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Medium, EstimatedDays = 3, DisplayOrder = 2, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 10, Name = "Business class travel arrangements", Description = "Book business class tickets", Category = "Gold CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.High, EstimatedDays = 5, DisplayOrder = 3, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 11, Name = "Prepare corporate welcome kit", Description = "Prepare standard welcome materials", Category = "Gold CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Medium, EstimatedDays = 3, DisplayOrder = 4, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 12, Name = "Senior management engagement", Description = "Schedule meetings with senior leaders", Category = "Gold CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.High, EstimatedDays = 7, DisplayOrder = 5, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 13, Name = "Facility tour arrangement", Description = "Organize standard facility tour", Category = "Gold CS", AssignedToTeam = "Operations", Priority = TaskPriority.Medium, EstimatedDays = 2, DisplayOrder = 6, IsActive = true, CreatedDate = DateTime.UtcNow },
+
+                // Silver CS Checklist
+                new TaskTemplate { Id = 14, Name = "Confirm standard accommodation (3-star hotel)", Description = "Book standard accommodation", Category = "Silver CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Medium, EstimatedDays = 3, DisplayOrder = 1, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 15, Name = "Arrange basic refreshments", Description = "Organize refreshments and lunch", Category = "Silver CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Low, EstimatedDays = 1, DisplayOrder = 2, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 16, Name = "Economy travel arrangements", Description = "Book economy class tickets", Category = "Silver CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Medium, EstimatedDays = 3, DisplayOrder = 3, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 17, Name = "Prepare standard welcome materials", Description = "Prepare basic welcome folder", Category = "Silver CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Low, EstimatedDays = 2, DisplayOrder = 4, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 18, Name = "Management engagement", Description = "Schedule meetings with team leads", Category = "Silver CS", AssignedToTeam = "Client Experience", Priority = TaskPriority.Medium, EstimatedDays = 5, DisplayOrder = 5, IsActive = true, CreatedDate = DateTime.UtcNow },
+
+                // Marketing Team Checklist
+                new TaskTemplate { Id = 19, Name = "Prepare marketing presentations", Description = "Create comprehensive marketing deck", Category = "Marketing", AssignedToTeam = "Marketing", Priority = TaskPriority.High, EstimatedDays = 5, DisplayOrder = 1, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 20, Name = "Compile case studies", Description = "Gather relevant case studies and success stories", Category = "Marketing", AssignedToTeam = "Marketing", Priority = TaskPriority.Medium, EstimatedDays = 3, DisplayOrder = 2, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 21, Name = "Prepare company brochures", Description = "Print and prepare branded materials", Category = "Marketing", AssignedToTeam = "Marketing", Priority = TaskPriority.Medium, EstimatedDays = 3, DisplayOrder = 3, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 22, Name = "Create video presentations", Description = "Prepare video demos and presentations", Category = "Marketing", AssignedToTeam = "Marketing", Priority = TaskPriority.Medium, EstimatedDays = 5, DisplayOrder = 4, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 23, Name = "Arrange photography/videography", Description = "Coordinate photo/video coverage of visit", Category = "Marketing", AssignedToTeam = "Creative Hub", Priority = TaskPriority.Low, EstimatedDays = 2, DisplayOrder = 5, IsActive = true, CreatedDate = DateTime.UtcNow },
+
+                // TIM Team Checklist
+                new TaskTemplate { Id = 24, Name = "Setup conference room AV equipment", Description = "Test and configure audio-visual systems", Category = "TIM", AssignedToTeam = "TIM", Priority = TaskPriority.High, EstimatedDays = 1, DisplayOrder = 1, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 25, Name = "Prepare demo environments", Description = "Setup technical demo platforms and environments", Category = "TIM", AssignedToTeam = "TIM", Priority = TaskPriority.Critical, EstimatedDays = 5, DisplayOrder = 2, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 26, Name = "Ensure network connectivity", Description = "Verify and test network access for visitors", Category = "TIM", AssignedToTeam = "TIM", Priority = TaskPriority.High, EstimatedDays = 2, DisplayOrder = 3, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 27, Name = "Configure visitor Wi-Fi access", Description = "Setup secure guest Wi-Fi credentials", Category = "TIM", AssignedToTeam = "TIM", Priority = TaskPriority.Medium, EstimatedDays = 1, DisplayOrder = 4, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 28, Name = "Backup technical support", Description = "Arrange on-site technical support during visit", Category = "TIM", AssignedToTeam = "TIM", Priority = TaskPriority.High, EstimatedDays = 1, DisplayOrder = 5, IsActive = true, CreatedDate = DateTime.UtcNow },
+                new TaskTemplate { Id = 29, Name = "Test presentation equipment", Description = "Test projectors, screens, and video conferencing", Category = "TIM", AssignedToTeam = "TIM", Priority = TaskPriority.Medium, EstimatedDays = 1, DisplayOrder = 6, IsActive = true, CreatedDate = DateTime.UtcNow }
             );
         }
     }
