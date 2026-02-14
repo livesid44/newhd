@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitManagement.Data;
 using VisitManagement.Models;
+using VisitManagement.Services;
 
 namespace VisitManagement.Controllers
 {
@@ -10,10 +11,12 @@ namespace VisitManagement.Controllers
     public class VisitsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public VisitsController(ApplicationDbContext context)
+        public VisitsController(ApplicationDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: Visits
@@ -110,6 +113,18 @@ namespace VisitManagement.Controllers
                 
                 _context.Add(visit);
                 await _context.SaveChangesAsync();
+                
+                // Send Visit Created email notification
+                try
+                {
+                    await _emailService.SendVisitNotificationAsync(visit, EmailTemplateType.VisitCreated);
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the request
+                    Console.WriteLine($"Failed to send visit created email: {ex.Message}");
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
             PopulateDropdownData();
@@ -160,6 +175,9 @@ namespace VisitManagement.Controllers
             {
                 try
                 {
+                    // Get original visit to check status change
+                    var originalVisit = await _context.Visits.AsNoTracking().FirstOrDefaultAsync(v => v.Id == id);
+                    
                     visit.ModifiedDate = DateTime.Now;
                     
                     // Re-evaluate category if not set and TCV or visitor level exists
@@ -170,6 +188,26 @@ namespace VisitManagement.Controllers
                     
                     _context.Update(visit);
                     await _context.SaveChangesAsync();
+                    
+                    // Send appropriate email notification
+                    try
+                    {
+                        // If status changed to Confirmed, send confirmation email
+                        if (originalVisit?.VisitStatus != VisitStatus.Confirmed && visit.VisitStatus == VisitStatus.Confirmed)
+                        {
+                            await _emailService.SendVisitNotificationAsync(visit, EmailTemplateType.VisitConfirmed);
+                        }
+                        // Otherwise, send update email
+                        else
+                        {
+                            await _emailService.SendVisitNotificationAsync(visit, EmailTemplateType.VisitUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log error but don't fail the request
+                        Console.WriteLine($"Failed to send visit email: {ex.Message}");
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

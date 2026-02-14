@@ -158,6 +158,54 @@ namespace VisitManagement.Services
             }
         }
 
+        // New unified method to send visit notifications based on template type
+        public async Task<bool> SendVisitNotificationAsync(Visit visit, EmailTemplateType templateType)
+        {
+            var templateTypeString = templateType.ToString();
+            var template = await _context.EmailTemplates
+                .FirstOrDefaultAsync(t => t.TemplateType == templateTypeString && t.IsActive);
+
+            if (template == null)
+            {
+                _logger.LogWarning($"No active email template found for {templateType}");
+                return false;
+            }
+
+            var subject = ReplacePlaceholders(template.Subject, visit);
+            var body = ReplacePlaceholders(template.Body, visit);
+
+            return await SendEmailAsync(
+                template.ToRecipients, 
+                template.CcRecipients, 
+                template.BccRecipients, 
+                subject, 
+                body);
+        }
+
+        // New unified method to send task notifications based on template type
+        public async Task<bool> SendTaskNotificationAsync(TaskAssignment task, EmailTemplateType templateType)
+        {
+            var templateTypeString = templateType.ToString();
+            var template = await _context.EmailTemplates
+                .FirstOrDefaultAsync(t => t.TemplateType == templateTypeString && t.IsActive);
+
+            if (template == null)
+            {
+                _logger.LogWarning($"No active email template found for {templateType}");
+                return false;
+            }
+
+            var subject = ReplacePlaceholders(template.Subject, task);
+            var body = ReplacePlaceholders(template.Body, task);
+
+            return await SendEmailAsync(
+                template.ToRecipients, 
+                template.CcRecipients, 
+                template.BccRecipients, 
+                subject, 
+                body);
+        }
+
         private string ReplacePlaceholders(string text, Visit visit)
         {
             return text
@@ -168,6 +216,29 @@ namespace VisitManagement.Services
                 .Replace("{SalesSpoc}", visit.SalesSpoc ?? "")
                 .Replace("{OpportunityType}", visit.OpportunityType.ToString())
                 .Replace("{NameAndAttendees}", visit.VisitorsName ?? "");
+        }
+
+        private string ReplacePlaceholders(string text, TaskAssignment task)
+        {
+            var result = text
+                .Replace("{TaskName}", task.TaskName ?? "")
+                .Replace("{AssignedTeam}", task.AssignedToTeam ?? "")
+                .Replace("{DueDate}", task.DueDate.ToString("dd/MM/yyyy"))
+                .Replace("{Priority}", task.Priority.ToString())
+                .Replace("{TaskStatus}", task.Status.ToString())
+                .Replace("{TaskDescription}", task.Description ?? "");
+
+            // Add visit details if available
+            if (task.Visit != null)
+            {
+                result = result
+                    .Replace("{AccountName}", task.Visit.AccountName ?? "")
+                    .Replace("{VisitDate}", task.Visit.VisitDate.ToString("dd/MM/yyyy"))
+                    .Replace("{Location}", task.Visit.Location ?? "")
+                    .Replace("{Category}", task.Visit.Category?.ToString() ?? "");
+            }
+
+            return result;
         }
     }
 }

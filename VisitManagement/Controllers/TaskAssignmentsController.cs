@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitManagement.Data;
 using VisitManagement.Models;
+using VisitManagement.Services;
 
 namespace VisitManagement.Controllers
 {
@@ -10,10 +11,12 @@ namespace VisitManagement.Controllers
     public class TaskAssignmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public TaskAssignmentsController(ApplicationDbContext context)
+        public TaskAssignmentsController(ApplicationDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: TaskAssignments
@@ -90,6 +93,26 @@ namespace VisitManagement.Controllers
                 task.CreatedBy = User.Identity?.Name ?? "Unknown";
                 _context.Add(task);
                 await _context.SaveChangesAsync();
+                
+                // Send Task Assigned email notification
+                try
+                {
+                    // Load the visit to get additional details for email
+                    var taskWithVisit = await _context.TaskAssignments
+                        .Include(t => t.Visit)
+                        .FirstOrDefaultAsync(t => t.Id == task.Id);
+                        
+                    if (taskWithVisit != null)
+                    {
+                        await _emailService.SendTaskNotificationAsync(taskWithVisit, EmailTemplateType.TaskAssigned);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the request
+                    Console.WriteLine($"Failed to send task assigned email: {ex.Message}");
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.Visits = _context.Visits.OrderByDescending(v => v.CreatedDate).ToList();
