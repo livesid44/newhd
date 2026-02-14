@@ -47,6 +47,7 @@
                             Status <i class="bi bi-funnel"></i>
                         </a>
                     </th>
+                    <th>Category</th>
                     <th>Location</th>
                     <th>Actions</th>
                 </tr>
@@ -67,6 +68,27 @@
                             else
                             {
                                 <span class="badge bg-warning text-dark">Tentative</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Category.HasValue)
+                            {
+                                @switch (item.Category.Value)
+                                {
+                                    case VisitManagement.Models.VisitCategory.Platinum:
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-star-fill"></i> Platinum</span>
+                                        break;
+                                    case VisitManagement.Models.VisitCategory.Gold:
+                                        <span class="badge bg-primary"><i class="bi bi-star-fill"></i> Gold</span>
+                                        break;
+                                    case VisitManagement.Models.VisitCategory.Silver:
+                                        <span class="badge bg-secondary"><i class="bi bi-star"></i> Silver</span>
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
                             }
                         </td>
                         <td>@Html.DisplayFor(modelItem => item.Location)</td>

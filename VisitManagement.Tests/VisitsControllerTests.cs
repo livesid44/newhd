@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using VisitManagement.Controllers;
 using VisitManagement.Data;
 using VisitManagement.Models;
+using VisitManagement.Services;
 using Xunit;
 
 namespace VisitManagement.Tests
@@ -19,17 +21,29 @@ namespace VisitManagement.Tests
             return context;
         }
 
+        private IEmailService GetMockEmailService()
+        {
+            var mockEmailService = new Mock<IEmailService>();
+            
+            // Setup SendVisitNotificationAsync to return success
+            mockEmailService
+                .Setup(x => x.SendVisitNotificationAsync(It.IsAny<Visit>(), It.IsAny<EmailTemplateType>()))
+                .ReturnsAsync(true);
+            
+            return mockEmailService.Object;
+        }
+
         [Fact]
         public async Task Index_ReturnsViewResult_WithListOfVisits()
         {
             // Arrange
             var context = GetInMemoryDbContext();
-            var controller = new VisitsController(context);
+            var emailService = GetMockEmailService();
+            var controller = new VisitsController(context, emailService);
 
             var visit = new Visit
             {
                 Id = 1,
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",
@@ -71,11 +85,11 @@ namespace VisitManagement.Tests
         {
             // Arrange
             var context = GetInMemoryDbContext();
-            var controller = new VisitsController(context);
+            var emailService = GetMockEmailService();
+            var controller = new VisitsController(context, emailService);
 
             var visit = new Visit
             {
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",
@@ -114,7 +128,8 @@ namespace VisitManagement.Tests
         {
             // Arrange
             var context = GetInMemoryDbContext();
-            var controller = new VisitsController(context);
+            var emailService = GetMockEmailService();
+            var controller = new VisitsController(context, emailService);
 
             // Act
             var result = await controller.Details(null);
@@ -128,12 +143,12 @@ namespace VisitManagement.Tests
         {
             // Arrange
             var context = GetInMemoryDbContext();
-            var controller = new VisitsController(context);
+            var emailService = GetMockEmailService();
+            var controller = new VisitsController(context, emailService);
 
             var visit = new Visit
             {
                 Id = 1,
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",
@@ -175,12 +190,12 @@ namespace VisitManagement.Tests
         {
             // Arrange
             var context = GetInMemoryDbContext();
-            var controller = new VisitsController(context);
+            var emailService = GetMockEmailService();
+            var controller = new VisitsController(context, emailService);
 
             var visit = new Visit
             {
                 Id = 1,
-                SerialNumber = 1,
                 TypeOfVisit = "Test Visit",
                 Vertical = "Test Vertical",
                 SalesSpoc = "Test SPOC",

@@ -72,6 +72,18 @@
                             <img src="~/images/menuIcons/icon5.png" alt="" /> <span>Visits</span>
                         </a>
                     </li>
+                    <li>
+                        <a asp-controller="TaskAssignments" asp-action="Index">
+                            <img src="~/images/menuIcons/icon9.png" alt="" />
+                            <img src="~/images/menuIcons/icon9.png" alt="" /> <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Stakeholders" asp-action="Index">
+                            <img src="~/images/menuIcons/icon3.png" alt="" />
+                            <img src="~/images/menuIcons/icon3.png" alt="" /> <span>Stakeholders</span>
+                        </a>
+                    </li>
                     @if (User.IsInRole("Admin"))
                     {
                         <li>

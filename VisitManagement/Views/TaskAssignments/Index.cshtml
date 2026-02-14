@@ -1,0 +1,118 @@
+@model IEnumerable<VisitManagement.Models.TaskAssignment>
+
+@{
+    ViewData["Title"] = "Task Assignments";
+}
+
+<div class="white-bg-main">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h5 class="mb-0">Task Assignments</h5>
+        </div>
+        <div class="col-md-3">
+            <a asp-action="Create" class="btn btn-primary float-end">
+                <i class="bi bi-plus-circle"></i> Add New Task
+            </a>
+        </div>
+        <div class="col-md-3">
+            <form asp-action="Index" method="get">
+                <div class="input-group">
+                    <select name="filterTeam" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="">All Teams</option>
+                        <option value="Client Experience" selected="@(ViewData["CurrentFilterTeam"]?.ToString() == "Client Experience")">Client Experience</option>
+                        <option value="Marketing" selected="@(ViewData["CurrentFilterTeam"]?.ToString() == "Marketing")">Marketing</option>
+                        <option value="Creative Hub" selected="@(ViewData["CurrentFilterTeam"]?.ToString() == "Creative Hub")">Creative Hub</option>
+                        <option value="Customer Success" selected="@(ViewData["CurrentFilterTeam"]?.ToString() == "Customer Success")">Customer Success</option>
+                        <option value="TIM" selected="@(ViewData["CurrentFilterTeam"]?.ToString() == "TIM")">TIM</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="clear-20" style="height: 20px; clear: both;"></div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Visit/Account</th>
+                    <th>Assigned To</th>
+                    <th>Due Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.TaskName)</td>
+                        <td>@(item.Visit?.AccountName ?? "N/A")</td>
+                        <td>
+                            @item.AssignedToTeam
+                            @if (!string.IsNullOrEmpty(item.AssignedToPerson))
+                            {
+                                <br /><small class="text-muted">(@item.AssignedToPerson)</small>
+                            }
+                        </td>
+                        <td>@item.DueDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @switch (item.Priority)
+                            {
+                                case VisitManagement.Models.TaskPriority.Critical:
+                                    <span class="badge bg-danger">Critical</span>
+                                    break;
+                                case VisitManagement.Models.TaskPriority.High:
+                                    <span class="badge bg-warning text-dark">High</span>
+                                    break;
+                                case VisitManagement.Models.TaskPriority.Medium:
+                                    <span class="badge bg-info">Medium</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-secondary">Low</span>
+                                    break;
+                            }
+                        </td>
+                        <td>
+                            @switch (item.Status)
+                            {
+                                case VisitManagement.Models.TaskAssignmentStatus.Completed:
+                                    <span class="badge bg-success">Completed</span>
+                                    break;
+                                case VisitManagement.Models.TaskAssignmentStatus.InProgress:
+                                    <span class="badge bg-primary">In Progress</span>
+                                    break;
+                                case VisitManagement.Models.TaskAssignmentStatus.Blocked:
+                                    <span class="badge bg-danger">Blocked</span>
+                                    break;
+                                case VisitManagement.Models.TaskAssignmentStatus.Cancelled:
+                                    <span class="badge bg-secondary">Cancelled</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-light text-dark">Not Started</span>
+                                    break;
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info" title="Details">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

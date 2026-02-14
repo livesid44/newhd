@@ -39,6 +39,10 @@ namespace VisitManagement.Models
         [MaxLength(500)]
         public string? DefaultCcRecipients { get; set; }
 
+        [Display(Name = "Default BCC Recipients")]
+        [MaxLength(500)]
+        public string? DefaultBccRecipients { get; set; }
+
         [Display(Name = "Enable SSL")]
         public bool EnableSsl { get; set; } = true;
 

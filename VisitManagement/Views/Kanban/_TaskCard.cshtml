@@ -1,0 +1,39 @@
+@model VisitManagement.Models.TaskAssignment
+
+@{
+    var priorityClass = Model.Priority switch
+    {
+        VisitManagement.Models.TaskPriority.Critical => "task-priority-critical",
+        VisitManagement.Models.TaskPriority.High => "task-priority-high",
+        VisitManagement.Models.TaskPriority.Medium => "task-priority-medium",
+        _ => "task-priority-low"
+    };
+
+    var isOverdue = Model.DueDate < DateTime.Now && Model.Status != VisitManagement.Models.TaskAssignmentStatus.Completed;
+}
+
+<div class="kanban-card @priorityClass" draggable="true" data-task-id="@Model.Id" data-status="@Model.Status">
+    <div class="task-title">@Model.TaskName</div>
+    <div class="task-meta">
+        <i class="bi bi-person"></i> @Model.AssignedToTeam
+        @if (!string.IsNullOrEmpty(Model.AssignedToPerson))
+        {
+            <br /><small>(@Model.AssignedToPerson)</small>
+        }
+    </div>
+    <div class="task-meta">
+        <i class="bi bi-flag"></i> <span class="badge badge-sm bg-@(Model.Priority == VisitManagement.Models.TaskPriority.Critical ? "danger" : Model.Priority == VisitManagement.Models.TaskPriority.High ? "warning" : Model.Priority == VisitManagement.Models.TaskPriority.Medium ? "info" : "secondary")">@Model.Priority</span>
+    </div>
+    <div class="task-due-date @(isOverdue ? "task-due-overdue" : "")">
+        <i class="bi bi-calendar"></i> Due: @Model.DueDate.ToString("dd/MM/yyyy")
+        @if (isOverdue)
+        {
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        }
+    </div>
+    <div class="mt-2">
+        <a asp-controller="TaskAssignments" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-primary btn-sm" style="font-size: 11px;">
+            <i class="bi bi-eye"></i> View
+        </a>
+    </div>
+</div>

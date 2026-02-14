@@ -68,20 +68,28 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label asp-for="DefaultToRecipients" class="form-label"></label>
                         <input asp-for="DefaultToRecipients" class="form-control" placeholder="email1@example.com; email2@example.com" />
                         <span asp-validation-for="DefaultToRecipients" class="text-danger"></span>
-                        <small class="form-text text-muted">Separate multiple emails with semicolons (;). These recipients will receive all visit notification emails in addition to the visit creator.</small>
+                        <small class="form-text text-muted">Separate multiple emails with semicolons or commas.</small>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label asp-for="DefaultCcRecipients" class="form-label"></label>
                         <input asp-for="DefaultCcRecipients" class="form-control" placeholder="cc1@example.com; cc2@example.com" />
                         <span asp-validation-for="DefaultCcRecipients" class="text-danger"></span>
-                        <small class="form-text text-muted">Separate multiple emails with semicolons (;). These recipients will be CC'd on all visit notification emails.</small>
+                        <small class="form-text text-muted">Separate multiple emails with semicolons or commas.</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label asp-for="DefaultBccRecipients" class="form-label"></label>
+                        <input asp-for="DefaultBccRecipients" class="form-control" placeholder="bcc1@example.com; bcc2@example.com" />
+                        <span asp-validation-for="DefaultBccRecipients" class="text-danger"></span>
+                        <small class="form-text text-muted">Separate multiple emails with semicolons or commas.</small>
                     </div>
                 </div>
             </div>

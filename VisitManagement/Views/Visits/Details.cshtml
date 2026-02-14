@@ -10,8 +10,8 @@
     <div class="row">
         <div class="col-md-6">
             <dl class="row">
-                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.SerialNumber)</dt>
-                <dd class="col-sm-7">@Html.DisplayFor(model => model.SerialNumber)</dd>
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.VisitDate)</dt>
+                <dd class="col-sm-7">@Model.VisitDate.ToString("dd/MM/yyyy")</dd>
 
                 <dt class="col-sm-5">@Html.DisplayNameFor(model => model.TypeOfVisit)</dt>
                 <dd class="col-sm-7">@Html.DisplayFor(model => model.TypeOfVisit)</dd>
@@ -52,6 +52,35 @@
                     else
                     {
                         <span class="badge bg-warning text-dark">Tentative</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-5">@Html.DisplayNameFor(model => model.Category)</dt>
+                <dd class="col-sm-7">
+                    @if (Model.Category.HasValue)
+                    {
+                        @switch (Model.Category.Value)
+                        {
+                            case VisitManagement.Models.VisitCategory.Platinum:
+                                <span class="badge bg-warning text-dark" style="font-size: 1.1rem;">
+                                    <i class="bi bi-star-fill"></i> Platinum
+                                </span>
+                                break;
+                            case VisitManagement.Models.VisitCategory.Gold:
+                                <span class="badge bg-primary" style="font-size: 1.1rem;">
+                                    <i class="bi bi-star-fill"></i> Gold
+                                </span>
+                                break;
+                            case VisitManagement.Models.VisitCategory.Silver:
+                                <span class="badge bg-secondary" style="font-size: 1.1rem;">
+                                    <i class="bi bi-star"></i> Silver
+                                </span>
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">Not categorized</span>
                     }
                 </dd>
             </dl>
@@ -96,7 +125,13 @@
             </dl>
         </div>
     </div>
-    <div>
+    <div class="mt-3">
+        <a asp-controller="Checklists" asp-action="Index" asp-route-visitId="@Model.Id" class="btn btn-success">
+            <i class="bi bi-check2-square"></i> View Checklist
+        </a>
+        <a asp-controller="TaskAssignments" asp-action="Create" asp-route-visitId="@Model.Id" class="btn btn-info">
+            <i class="bi bi-plus-circle"></i> Add Task
+        </a>
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>

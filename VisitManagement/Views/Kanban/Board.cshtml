@@ -1,0 +1,193 @@
+@model IEnumerable<VisitManagement.Models.TaskAssignment>
+
+@{
+    ViewData["Title"] = "Kanban Board";
+    var visit = ViewData["VisitDetails"] as VisitManagement.Models.Visit;
+    var visitId = ViewData["VisitId"];
+}
+
+<div class="pg-title">
+    <h2>Task Kanban Board</h2>
+    <p class="text-muted">Visit: @visit?.AccountName (@visit?.VisitDate.ToString("dd/MM/yyyy"))</p>
+</div>
+
+<div class="white-bg-main mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <a asp-controller="Visits" asp-action="Details" asp-route-id="@visitId" class="btn btn-sm btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Visit
+            </a>
+        </div>
+        <div>
+            <span class="badge bg-info">Total Tasks: @Model.Count()</span>
+        </div>
+    </div>
+</div>
+
+<div class="kanban-board">
+    @{
+        var notStarted = Model.Where(t => t.Status == VisitManagement.Models.TaskAssignmentStatus.NotStarted).ToList();
+        var inProgress = Model.Where(t => t.Status == VisitManagement.Models.TaskAssignmentStatus.InProgress).ToList();
+        var blocked = Model.Where(t => t.Status == VisitManagement.Models.TaskAssignmentStatus.Blocked).ToList();
+        var completed = Model.Where(t => t.Status == VisitManagement.Models.TaskAssignmentStatus.Completed).ToList();
+        var cancelled = Model.Where(t => t.Status == VisitManagement.Models.TaskAssignmentStatus.Cancelled).ToList();
+    }
+
+    <div class="row">
+        <div class="col-md-2">
+            <div class="kanban-column" data-status="NotStarted">
+                <div class="kanban-column-header bg-secondary text-white">
+                    <h6 class="mb-0">Not Started</h6>
+                    <span class="badge bg-light text-dark">@notStarted.Count</span>
+                </div>
+                <div class="kanban-cards">
+                    @foreach (var task in notStarted)
+                    {
+                        <partial name="_TaskCard" model="task" />
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="kanban-column" data-status="InProgress">
+                <div class="kanban-column-header bg-primary text-white">
+                    <h6 class="mb-0">In Progress</h6>
+                    <span class="badge bg-light text-dark">@inProgress.Count</span>
+                </div>
+                <div class="kanban-cards">
+                    @foreach (var task in inProgress)
+                    {
+                        <partial name="_TaskCard" model="task" />
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="kanban-column" data-status="Blocked">
+                <div class="kanban-column-header bg-danger text-white">
+                    <h6 class="mb-0">Blocked</h6>
+                    <span class="badge bg-light text-dark">@blocked.Count</span>
+                </div>
+                <div class="kanban-cards">
+                    @foreach (var task in blocked)
+                    {
+                        <partial name="_TaskCard" model="task" />
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="kanban-column" data-status="Completed">
+                <div class="kanban-column-header bg-success text-white">
+                    <h6 class="mb-0">Completed</h6>
+                    <span class="badge bg-light text-dark">@completed.Count</span>
+                </div>
+                <div class="kanban-cards">
+                    @foreach (var task in completed)
+                    {
+                        <partial name="_TaskCard" model="task" />
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="kanban-column" data-status="Cancelled">
+                <div class="kanban-column-header bg-secondary text-white">
+                    <h6 class="mb-0">Cancelled</h6>
+                    <span class="badge bg-light text-dark">@cancelled.Count</span>
+                </div>
+                <div class="kanban-cards">
+                    @foreach (var task in cancelled)
+                    {
+                        <partial name="_TaskCard" model="task" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .kanban-board { overflow-x: auto; padding: 20px; background-color: #f8f9fa; min-height: 70vh; }
+        .kanban-column { background-color: #e9ecef; border-radius: 8px; height: 100%; min-height: 500px; }
+        .kanban-column-header { padding: 12px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+        .kanban-cards { padding: 10px; min-height: 400px; }
+        .kanban-card { background-color: white; border-radius: 6px; padding: 12px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: move; transition: transform 0.2s; }
+        .kanban-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .kanban-card.dragging { opacity: 0.5; }
+        .kanban-cards.drag-over { background-color: #dee2e6; }
+        .task-priority-critical { border-left: 4px solid #dc3545; }
+        .task-priority-high { border-left: 4px solid #ffc107; }
+        .task-priority-medium { border-left: 4px solid #17a2b8; }
+        .task-priority-low { border-left: 4px solid #6c757d; }
+        .task-title { font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #333; }
+        .task-meta { font-size: 12px; color: #666; margin-bottom: 4px; }
+        .task-due-date { font-size: 11px; color: #999; }
+        .task-due-overdue { color: #dc3545; font-weight: 600; }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.kanban-card');
+            const columns = document.querySelectorAll('.kanban-cards');
+            let draggedElement = null;
+
+            cards.forEach(card => {
+                card.addEventListener('dragstart', function(e) {
+                    draggedElement = this;
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                card.addEventListener('dragend', function() {
+                    this.classList.remove('dragging');
+                });
+            });
+
+            columns.forEach(column => {
+                column.addEventListener('dragover', function(e) {
+                    if (e.preventDefault) e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    this.classList.add('drag-over');
+                    return false;
+                });
+                column.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
+                column.addEventListener('drop', function(e) {
+                    if (e.stopPropagation) e.stopPropagation();
+                    this.classList.remove('drag-over');
+                    
+                    if (draggedElement) {
+                        const taskId = draggedElement.getAttribute('data-task-id');
+                        const newStatus = this.parentElement.getAttribute('data-status');
+                        
+                        fetch('/Kanban/UpdateStatus', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ taskId: parseInt(taskId), newStatus: newStatus })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                this.appendChild(draggedElement);
+                                draggedElement.setAttribute('data-status', newStatus);
+                                document.querySelectorAll('.kanban-cards').forEach(col => {
+                                    const badge = col.previousElementSibling.querySelector('.badge');
+                                    if (badge) badge.textContent = col.children.length;
+                                });
+                            }
+                        });
+                    }
+                    return false;
+                });
+            });
+        });
+    </script>
+}

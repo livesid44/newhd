@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VisitManagement.Data;
 using VisitManagement.Models;
+using VisitManagement.Services;
 
 namespace VisitManagement.Controllers
 {
@@ -10,10 +11,12 @@ namespace VisitManagement.Controllers
     public class VisitsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
 
-        public VisitsController(ApplicationDbContext context)
+        public VisitsController(ApplicationDbContext context, IEmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: Visits
@@ -88,22 +91,43 @@ namespace VisitManagement.Controllers
         // GET: Visits/Create
         public IActionResult Create()
         {
+            PopulateDropdownData();
             return View();
         }
 
         // POST: Visits/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages")] Visit visit)
+        public async Task<IActionResult> Create([Bind("VisitDate,TypeOfVisit,OpportunityType,SalesStage,AccountName,Category,Geo,Location,LocationCsSpoc,SalesSpoc,Vertical,VerticalHead,AccountOwner,Horizontal,HorizontalHead,ClientsCountryOfOrigin,DebitingProjectId,TcvMnUsd,VisitorsName,VisitDuration,AdditionalInformation,Repository,VisitStatus,VisitType,IntimationDate,Site,NumberOfAttendees,LevelOfVisitors,Remarks,VisitLead,KeyMessages,OpportunityDetails,ServiceScope")] Visit visit)
         {
             if (ModelState.IsValid)
             {
                 visit.CreatedDate = DateTime.Now;
                 visit.CreatedBy = User.Identity?.Name ?? "Unknown";
+                
+                // Automatically determine visit category if not set
+                if (!visit.Category.HasValue)
+                {
+                    visit.Category = DetermineVisitCategory(visit);
+                }
+                
                 _context.Add(visit);
                 await _context.SaveChangesAsync();
+                
+                // Send Visit Created email notification
+                try
+                {
+                    await _emailService.SendVisitNotificationAsync(visit, EmailTemplateType.VisitCreated);
+                }
+                catch (Exception ex)
+                {
+                    // Log error but don't fail the request
+                    Console.WriteLine($"Failed to send visit created email: {ex.Message}");
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
+            PopulateDropdownData();
             return View(visit);
         }
 
@@ -127,13 +151,14 @@ namespace VisitManagement.Controllers
                 return Forbid();
             }
 
+            PopulateDropdownData();
             return View(visit);
         }
 
         // POST: Visits/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SerialNumber,TypeOfVisit,Vertical,SalesSpoc,AccountName,DebitingProjectId,OpportunityDetails,OpportunityType,ServiceScope,SalesStage,TcvMnUsd,VisitStatus,VisitType,VisitDate,IntimationDate,Location,Site,VisitorsName,NumberOfAttendees,LevelOfVisitors,VisitDuration,Remarks,VisitLead,KeyMessages,CreatedDate,CreatedBy")] Visit visit)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VisitDate,TypeOfVisit,OpportunityType,SalesStage,AccountName,Category,Geo,Location,LocationCsSpoc,SalesSpoc,Vertical,VerticalHead,AccountOwner,Horizontal,HorizontalHead,ClientsCountryOfOrigin,DebitingProjectId,TcvMnUsd,VisitorsName,VisitDuration,AdditionalInformation,Repository,VisitStatus,VisitType,IntimationDate,Site,NumberOfAttendees,LevelOfVisitors,Remarks,VisitLead,KeyMessages,OpportunityDetails,ServiceScope,CreatedDate,CreatedBy")] Visit visit)
         {
             if (id != visit.Id)
             {
@@ -150,9 +175,39 @@ namespace VisitManagement.Controllers
             {
                 try
                 {
+                    // Get original visit to check status change
+                    var originalVisit = await _context.Visits.AsNoTracking().FirstOrDefaultAsync(v => v.Id == id);
+                    
                     visit.ModifiedDate = DateTime.Now;
+                    
+                    // Re-evaluate category if not set and TCV or visitor level exists
+                    if (!visit.Category.HasValue)
+                    {
+                        visit.Category = DetermineVisitCategory(visit);
+                    }
+                    
                     _context.Update(visit);
                     await _context.SaveChangesAsync();
+                    
+                    // Send appropriate email notification
+                    try
+                    {
+                        // If status changed to Confirmed, send confirmation email
+                        if (originalVisit?.VisitStatus != VisitStatus.Confirmed && visit.VisitStatus == VisitStatus.Confirmed)
+                        {
+                            await _emailService.SendVisitNotificationAsync(visit, EmailTemplateType.VisitConfirmed);
+                        }
+                        // Otherwise, send update email
+                        else
+                        {
+                            await _emailService.SendVisitNotificationAsync(visit, EmailTemplateType.VisitUpdated);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log error but don't fail the request
+                        Console.WriteLine($"Failed to send visit email: {ex.Message}");
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -167,6 +222,7 @@ namespace VisitManagement.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            PopulateDropdownData();
             return View(visit);
         }
 
@@ -218,6 +274,155 @@ namespace VisitManagement.Controllers
         private bool VisitExists(int id)
         {
             return _context.Visits.Any(e => e.Id == id);
+        }
+
+        private void PopulateDropdownData()
+        {
+            ViewBag.TypeOfVisitList = new List<string>
+            {
+                "Prospect Visit",
+                "Operations Visit",
+                "RnR",
+                "Ramp",
+                "Trainings",
+                "Others"
+            };
+
+            ViewBag.VerticalList = new List<string>
+            {
+                "Technology",
+                "Finance",
+                "Healthcare",
+                "Manufacturing",
+                "Retail",
+                "Telecom",
+                "Others"
+            };
+
+            ViewBag.SalesStageList = new List<string>
+            {
+                "Prospect",
+                "Qualification",
+                "Proposal",
+                "Negotiation",
+                "Closed Won",
+                "Closed Lost"
+            };
+
+            ViewBag.VisitTypeList = new List<string>
+            {
+                "On-site",
+                "Virtual",
+                "Hybrid"
+            };
+
+            ViewBag.LocationList = new List<string>
+            {
+                "Pune",
+                "Mumbai",
+                "Bangalore",
+                "Hyderabad",
+                "Chennai",
+                "Delhi NCR",
+                "Kolkata",
+                "New York",
+                "London",
+                "Singapore",
+                "Dubai",
+                "Others"
+            };
+
+            ViewBag.SiteList = new List<string>
+            {
+                "Hinjewadi",
+                "Magarpatta",
+                "Whitefield",
+                "HITEC City",
+                "OMR",
+                "Gurgaon",
+                "Noida",
+                "Others"
+            };
+
+            ViewBag.LevelOfVisitorsList = new List<string>
+            {
+                "C-Level/CXO",
+                "VP Level",
+                "Director Level",
+                "Manager Level",
+                "Team Lead",
+                "Individual Contributor",
+                "Others"
+            };
+
+            ViewBag.VisitLeadList = new List<string>
+            {
+                "Capability",
+                "Sales",
+                "Marketing",
+                "Delivery",
+                "Others"
+            };
+
+            // Populate stakeholder-based dropdowns from database
+            var activeStakeholders = _context.Stakeholders.Where(s => s.IsActive).ToList();
+
+            // Location CS SPOC dropdown
+            ViewBag.LocationCsSpocList = activeStakeholders
+                .Where(s => s.Role == "Location CS SPOC")
+                .OrderBy(s => s.Location)
+                .ThenBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
+
+            // Sales SPOC dropdown
+            ViewBag.SalesSpocList = activeStakeholders
+                .Where(s => s.Role == "Sales SPOC")
+                .OrderBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
+
+            // Vertical Head dropdown
+            ViewBag.VerticalHeadList = activeStakeholders
+                .Where(s => s.Role == "Vertical Head")
+                .OrderBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
+
+            // Account Owner dropdown
+            ViewBag.AccountOwnerList = activeStakeholders
+                .Where(s => s.Role == "Account Owner")
+                .OrderBy(s => s.FullName)
+                .Select(s => s.FullName)
+                .Distinct()
+                .ToList();
+        }
+
+        private VisitCategory DetermineVisitCategory(Visit visit)
+        {
+            // Automatic categorization based on TCV and visitor level
+            var tcvInMillion = visit.TcvMnUsd;
+            var visitorLevel = visit.LevelOfVisitors?.ToLower() ?? "";
+
+            // Platinum: CXO involvement + >$20M opportunity OR C-Level visitors + >$15M
+            if ((visitorLevel.Contains("c-level") || visitorLevel.Contains("cxo") || visitorLevel.Contains("ceo") || 
+                 visitorLevel.Contains("cfo") || visitorLevel.Contains("cto")) && tcvInMillion >= 15)
+            {
+                return VisitCategory.Platinum;
+            }
+
+            // Gold: VP/Senior Leaders + $10-20M OR high-value opportunities
+            if ((visitorLevel.Contains("vp") || visitorLevel.Contains("vice president") || 
+                 visitorLevel.Contains("senior") || visitorLevel.Contains("director")) && tcvInMillion >= 10)
+            {
+                return VisitCategory.Gold;
+            }
+
+            // Silver: All others
+            return VisitCategory.Silver;
         }
     }
 }

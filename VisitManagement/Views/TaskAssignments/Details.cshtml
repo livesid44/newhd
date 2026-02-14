@@ -1,0 +1,93 @@
+@model VisitManagement.Models.TaskAssignment
+
+@{
+    ViewData["Title"] = "Task Assignment Details";
+}
+
+<div class="pg-title">
+    Task Assignment Details
+</div>
+<div class="white-bg-main">
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Visit)</dt>
+        <dd class="col-sm-9">
+            @if (Model.Visit != null)
+            {
+                <span>@Model.Visit.AccountName - @Model.Visit.VisitDate.ToString("MM/dd/yyyy")</span>
+            }
+        </dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TaskName)</dt>
+        <dd class="col-sm-9">@Model.TaskName</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AssignedToTeam)</dt>
+        <dd class="col-sm-9">@Model.AssignedToTeam</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AssignedToPerson)</dt>
+        <dd class="col-sm-9">@(Model.AssignedToPerson ?? "N/A")</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.DueDate)</dt>
+        <dd class="col-sm-9">@Model.DueDate.ToString("MM/dd/yyyy")</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Priority)</dt>
+        <dd class="col-sm-9">
+            @{
+                var priorityClass = Model.Priority switch
+                {
+                    VisitManagement.Models.TaskPriority.Critical => "badge bg-danger",
+                    VisitManagement.Models.TaskPriority.High => "badge bg-warning",
+                    VisitManagement.Models.TaskPriority.Medium => "badge bg-info",
+                    _ => "badge bg-secondary"
+                };
+            }
+            <span class="@priorityClass">@Model.Priority</span>
+        </dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Status)</dt>
+        <dd class="col-sm-9">
+            @{
+                var statusClass = Model.Status switch
+                {
+                    VisitManagement.Models.TaskAssignmentStatus.Completed => "badge bg-success",
+                    VisitManagement.Models.TaskAssignmentStatus.InProgress => "badge bg-primary",
+                    VisitManagement.Models.TaskAssignmentStatus.Blocked => "badge bg-danger",
+                    VisitManagement.Models.TaskAssignmentStatus.Cancelled => "badge bg-secondary",
+                    _ => "badge bg-warning"
+                };
+            }
+            <span class="@statusClass">@Model.Status</span>
+        </dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+        <dd class="col-sm-9">@(Model.Description ?? "N/A")</dd>
+
+        @if (!string.IsNullOrEmpty(Model.CompletionNotes))
+        {
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CompletionNotes)</dt>
+            <dd class="col-sm-9">@Model.CompletionNotes</dd>
+        }
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+        <dd class="col-sm-9">@Model.CreatedDate.ToString("MM/dd/yyyy HH:mm")</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedBy)</dt>
+        <dd class="col-sm-9">@Model.CreatedBy</dd>
+
+        @if (Model.ModifiedDate.HasValue)
+        {
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ModifiedDate)</dt>
+            <dd class="col-sm-9">@Model.ModifiedDate.Value.ToString("MM/dd/yyyy HH:mm")</dd>
+        }
+
+        @if (Model.CompletedDate.HasValue)
+        {
+            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CompletedDate)</dt>
+            <dd class="col-sm-9">@Model.CompletedDate.Value.ToString("MM/dd/yyyy HH:mm")</dd>
+        }
+    </dl>
+
+    <div class="mt-3">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+    </div>
+</div>
